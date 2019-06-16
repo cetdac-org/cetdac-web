@@ -19,7 +19,10 @@
         </div>
       </div>
     </div>
-    <div class="vote">
+    <div class="records mt-15">
+      bitapp 刚刚获得了 10 ABCT
+    </div>
+    <div class="vote mt-15">
       <div class="vote-content d-flex">
         <div class="w100p">
           <div>我的IOST: 0</div>
@@ -40,6 +43,9 @@
   .mt-8 {
     margin-top: 8px;
   }
+  .mt-15{
+    margin-top: 15px;
+  }
   .mt-20{
     margin-top: 20px;
   }
@@ -51,7 +57,7 @@
     background: #1F166B;
     border: 1px solid rgb(37, 27, 133);
     height: 170px;
-    border-radius: 12px;
+    border-radius: 8px;
     .banner-content {
       align-items: center;
       height: 100%;
@@ -63,11 +69,11 @@
       }
     }
   }
+  .records {
+    text-align: center;
+    color: #eee
+  }
   .vote {
-    .mt-1{
-      margin-top: 2px;
-    }
-    margin-top: 40px;
     a{
       color:#FF768A;
     }

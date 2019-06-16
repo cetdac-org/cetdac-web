@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="records mt-15">
-      bitapp 刚刚获得了 10 ABCT
+      bitapp 刚刚获得了 10 ABCT | {{ ip }}
     </div>
     <div class="vote mt-15">
       <div class="vote-content d-flex">
@@ -52,7 +52,7 @@
     margin-top: 20px;
   }
   .banner-bg {
-    background: url(/_nuxt/assets/imgs/abct_bg@2x.png) 0 0 no-repeat #1f166b;
+    background: url(~assets/imgs/abct_bg@2x.png) 0 0 no-repeat #1f166b;
     background-size: cover;
     height: 157px;
     border-radius: 8px;
@@ -116,7 +116,8 @@ import { mapState } from "vuex"
 export default {
   head() {
     return {
-      title: this.title
+      title: this.title,
+      ip: null,
     }
   },
 
@@ -129,19 +130,11 @@ export default {
   mounted(){
   },
 
-  asyncData({ req, app, query }) {
-    // return app.axios
-    //   .init(req)
-    //   .get("/api/promises?limit="+perPage + "&skip=0&count=1")
-    //   .then(res => {
-    //     if(!res.code){
-    //       return {
-    //         promises:res.data.data
-    //       }
-    //     }
-    //   }).catch(e=>{
-    //     console.error(e)
-    //   });
+  async asyncData({ req, app, query, $axios }) {
+    const ip = await $axios.$get('http://icanhazip.com')
+    return {
+      ip: ip
+    }
   },
 
   watch:{

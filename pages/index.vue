@@ -49,8 +49,9 @@
       opacity: 0.7;
     }
     background: #1F166B;
-    height: 174px;
-    border-radius: 8px;
+    border: 1px solid rgb(37, 27, 133);
+    height: 170px;
+    border-radius: 12px;
     .banner-content {
       align-items: center;
       height: 100%;

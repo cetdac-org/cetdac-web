@@ -1,0 +1,88 @@
+@font-face {
+  font-family: norwester;
+  src:
+  url(../fonts/norwester.ttf),
+  url(../fonts/norwester.otf) format("opentype")
+}
+
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.fl {
+  float:left;
+}
+
+.fr {
+  float:right;
+}
+
+.w100p{
+  width: 100%;
+}
+
+.font-norwester{
+  font-family: norwester;
+}
+
+.fs-12 {
+  font-size: 12px;
+}
+
+.fs-14 {
+  font-size: 14px;
+}
+
+.fs-16 {
+  font-size: 16px;
+}
+
+.fs-18 {
+  font-size: 18px !important;
+}
+
+.fs-20 {
+  font-size: 20px;
+}
+
+.fs-22 {
+  font-size: 22px;
+}
+
+.fs-24 {
+  font-size: 24px;
+}
+
+.ml-5 {
+  margin-left: 5px !important;
+}
+
+
+.btn-primary,btn-primary:hover {
+  color: #fff;
+  background-image: linear-gradient(59deg, #FF768A 0%, #F4398A 100%);
+  box-shadow: 0 -2px 2px 0 rgba(39,52,125,0.10);
+  border: 0;
+}
+.btn-primary:active {
+  color: #fff;
+  background-image: linear-gradient(59deg, rgb(226, 47, 125) 0%, rgb(226, 47, 125) 100%);
+}
+.btn-primary.disabled, .btn-primary:disabled {
+  color: #fff;
+  background-color: #b7b7b8;
+}
+.btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active, .show > .btn-primary.dropdown-toggle {
+  color: #fff;
+  background-image: linear-gradient(59deg, rgb(226, 47, 125) 0%, rgb(226, 47, 125) 100%);
+}
+.btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus, .show > .btn-primary.dropdown-toggle:focus {
+  box-shadow: 0 -2px 2px 0 rgba(39,52,125,0.10);
+}
+.btn-primary:focus, .btn-primary.focus {
+  box-shadow: 0 -2px 2px 0 rgba(39,52,125,0.10);
+}

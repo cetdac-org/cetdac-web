@@ -1,20 +1,22 @@
 <template>
   <div class="abct-web-index">
-    <div class="banner">
-      <div class="banner-content d-flex">
-        <img src="~/assets/imgs/icon_abct@2x.png" width="93">
-        <div class="banner-content-right">
-          <div>
-            <b-link to="/">什么是ABCT ></b-link>
-          </div>
-          <div class="mt-8">
-            <span class="font-norwester fs-22" to="/">1 ABCT = 0.022 IOST</span>
-            <img src="~/assets/imgs/icon_abct@2x.png" width="15">
-          </div>
-          <div class="mt-8">
-            <span class="fs-14" to="/">当日涨幅: <span class="rising"> 1%</span><img class="ml-5" src="~/assets/imgs/icon_rise.svg" width="9"></span>
-            <span class="ml-5">|</span>
-            <span class="ml-5 fs-14" to="/">累计涨幅: <span class="rising"> 20%</span><img class="ml-5" src="~/assets/imgs/icon_rise2.svg" width="9"></span>
+    <div class="banner-bg">
+      <div class="banner">
+        <div class="banner-content d-flex">
+          <img class="icon-abct" src="~/assets/imgs/icon_abct.svg" width="75">
+          <div class="banner-content-right">
+            <div>
+              <b-link to="/">什么是ABCT ></b-link>
+            </div>
+            <div class="mt-8">
+              <span class="font-norwester fs-22" to="/">1 ABCT = 0.022 IOST</span>
+              <img class="switch" src="~/assets/imgs/icon_switch.svg" width="15">
+            </div>
+            <div class="mt-8">
+              <span class="fs-14" to="/">当日涨幅: <span class="rising"> 1%</span><img class="ml-5" src="~/assets/imgs/icon_rise.svg" width="9"></span>
+              <span class="ml-5">|</span>
+              <span class="ml-5 fs-14" to="/">累计涨幅: <span class="rising"> 20%</span><img class="ml-5" src="~/assets/imgs/icon_rise2.svg" width="9"></span>
+            </div>
           </div>
         </div>
       </div>
@@ -49,22 +51,37 @@
   .mt-20{
     margin-top: 20px;
   }
-  .banner {
-    a{
-      color:white;
-      opacity: 0.7;
-    }
-    background: #1F166B;
-    border: 1px solid rgb(37, 27, 133);
-    height: 170px;
+  .banner-bg {
+    background: url(/_nuxt/assets/imgs/abct_bg@2x.png) 0 0 no-repeat #1f166b;
+    background-size: cover;
+    height: 157px;
     border-radius: 8px;
-    .banner-content {
-      align-items: center;
-      height: 100%;
-      .banner-content-right{
-        margin-left:12px;
-        .rising {
-          color: #0DB767;
+    box-shadow: #111 1px 1px 0;
+    .banner{
+      a{
+        color:white;
+        opacity: 0.7;
+      }
+      padding: 6px;
+      height: 151px;
+      border: 1px solid rgb(37, 27, 133);
+      border-radius: 8px;
+      background: transparent;
+      .icon-abct{
+        border-radius: 50px;
+        box-shadow:#222 0 0 4px;
+      }
+      .banner-content {
+        align-items: center;
+        height: 100%;
+        .switch{
+          margin-left:10px;
+        }
+        .banner-content-right{
+          margin-left:12px;
+          .rising {
+            color: #0DB767;
+          }
         }
       }
     }

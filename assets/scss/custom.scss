@@ -12,6 +12,18 @@
   clear: both;
   visibility: hidden;
 }
+.mt-5{
+  margin-top: 10px;
+}
+.mt-10{
+  margin-top: 10px;
+}
+.mt-15{
+  margin-top: 15px;
+}
+.mt-20{
+  margin-top: 20px;
+}
 
 .fl {
   float:left;
@@ -66,6 +78,7 @@
   color: #fff;
   background-image: linear-gradient(59deg, #FF768A 0%, #F4398A 100%);
   box-shadow: 0 -2px 2px 0 rgba(39,52,125,0.10);
+  border-radius: 10px;
   border: 0;
 }
 .btn-primary:active {
@@ -85,4 +98,20 @@
 }
 .btn-primary:focus, .btn-primary.focus {
   box-shadow: 0 -2px 2px 0 rgba(39,52,125,0.10);
+}
+.exchange-btn{
+  color: #fff;
+  line-height: 45px;
+  font-size: 20px;
+  text-align: center;
+  border-radius: 10px;
+  background-image: linear-gradient(59deg, #36F0F7 0%, #35BBF8 100%);
+}
+.vote-btn{
+  color: #fff;
+  line-height: 45px;
+  font-size: 20px;
+  text-align: center;
+  border-radius: 10px;
+  background-image: linear-gradient(59deg, #FF768A 0%, #F4398A 100%);
 }

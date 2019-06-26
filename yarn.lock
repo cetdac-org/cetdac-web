@@ -3534,10 +3534,10 @@ invert-kv@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-1.0.0.tgz#104a8e4aaca6d3d8cd157a8ef8bfab2d7a3ffdb6"
 
-iost@^0.1.17:
-  version "0.1.17"
-  resolved "https://registry.npm.taobao.org/iost/download/iost-0.1.17.tgz#0bfb5accf22f9f70ba811308984f35ca9411114e"
-  integrity sha1-C/tazPIvn3C6gRMImE81ypQREU4=
+iost@0.0.18:
+  version "0.0.18"
+  resolved "https://registry.npm.taobao.org/iost/download/iost-0.0.18.tgz#4c058d00bd99c2a3376a641de3ad75d6ee558773"
+  integrity sha1-TAWNAL2ZwqM3amQd46111u5Vh3M=
   dependencies:
     atob "^2.1.2"
     axios "^0.18.0"

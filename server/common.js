@@ -18,8 +18,31 @@ export default function API(axios) {
     getPrice () {
       return axios.get(`${apiUrl}/price`)
     },
-    getHistory () {
-      return axios.get(`${apiUrl}/historyobtainabct`)
-    }
+    getObtainHistory ({ page = 1, size = 20 } = {}) {
+      return axios.get(`${apiUrl}/historyobtainabct`,{
+        params: {
+          page,
+          size,
+        }
+      })
+    },
+    getIssueHistory (account, { page = 1, size = 20 } = {}) {
+      return axios.get(`${apiUrl}/issueobtainabct`,{
+        params: {
+          account,
+          page,
+          size,
+        }
+      })
+    },
+    getExchangeHistory (account, { page = 1, size = 20 } = {}) {
+      return axios.get(`${apiUrl}/exchangeobtainabct`,{
+        params: {
+          account,
+          page,
+          size,
+        }
+      })
+    },
   }
 }

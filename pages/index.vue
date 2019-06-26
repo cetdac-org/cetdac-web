@@ -13,61 +13,68 @@
               <img class="switch" src="~/assets/imgs/icon_switch.svg" width="15">
             </div>
             <div class="mt-8">
-              
-              <span class="fs-14" to="/">当日涨幅：<DiffLabel slot="activator" :diff="priceInfo.percent_change_24h" :formatter="(text) => fixedTwo(text) + '%'" tag="sup" class="fz-12" /></span>
-              <span class="ml-5">|</span>
-              <span class="ml-5 fs-14" to="/">累计涨幅：<DiffLabel slot="activator" :diff="priceInfo.percent_change" :formatter="(text) => fixedTwo(text) + '%'" tag="sup" class="fz-12" /></span>
+              <!-- <span class="fs-14" to="/">当日涨幅：<DiffLabel slot="activator" :diff="priceInfo.percent_change_24h" :formatter="(text) => fixedNumber(text,2) + '%'" tag="sup" class="fz-12" /></span> -->
+              <!-- <span class="ml-5">|</span> -->
+              <span class="ml-5 fs-14" to="/">累计涨幅：<DiffLabel slot="activator" :diff="priceInfo.percent_change" :formatter="(text) => fixedNumber(text,2) + '%'" tag="sup" class="fz-12" /></span>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="records mt-15">
-      bitapp 刚刚获得了 10 ABCT 
+      {{historyInfo.name + '\xa0'}} 刚刚获得了 {{ '\xa0'+fixedNumber(historyInfo.amount,4) + '\xa0'}} ABCT 
     </div>
     <div class="vote mt-15">
       <div class="vote-content d-flex">
         <div class="w100p">
-          <div>我的IOST：{{accountInfo.balance}}</div>
+          <div>我的IOST：{{fixedNumber(accountInfo.balance,4)}}</div>
           <div class="on-voting d-flex mt-2">
             <span>投票中的IOST：{{votebalances}}</span>
-            <b-link to="/">马上赎回 ></b-link>
+            <b-link  @click="unvoteModal()">马上赎回 ></b-link>
           </div>
         </div>
       </div>
       <div class="vote-btn mt-20" @click="toRoute('vote')">投票免费抢</div>
       <div class="tips-view mt-15">
-        <span>我的分红记录</span>
-        <span>发行规则？</span>
+        <span @click="historyModal('issue')">我的分红记录</span>
+        <span @click="ruleModal('publish')">发行规则？</span>
       </div>
     </div>
     <div class="exchange mt-20">
       <div class="exchange-tip">
         <div class="exchange-pool">
-          <span>回购资金池：{{fixedTwo(contractBalance.balance)}}</span>
-          <span>回购规则</span>
+          <span>回购资金池：{{fixedNumber(contractBalance.balance,2)}}</span>
+          <span @click="ruleModal('buy')">回购规则</span>
         </div>
         <div class="mt-15">
           <div>我的ABCT：{{tokenbalance}}</div>
-          <div>当前兑换价格 1 ABCT = {{ '\xa0'+price+'\xa0'}}IOST  = </div>
+          <div>当前兑换价格：1 ABCT = {{ '\xa0'+price+'\xa0'}}IOST  = {{'\xa0'+fixedNumber(priceInfo.price_usd,4) +'\xa0'}} </div>
         </div>
       </div>
       <div class="exchange-btn mt-20" @click="toRoute('exchange')" >兑换IOST</div>
       <div class="tips-view mt-15">
-        <span>我的兑换记录</span>
-        <span>兑换规则？</span>
+        <span @click="historyModal('exchange')">我的兑换记录</span>
+        <span @click="ruleModal('exchange')">兑换规则？</span>
       </div>
     </div>
+    <HistoryModal ref="historyModal" />
+    <TipsModal ref="tipsModal" />
+    <UnVoteModal ref="unvoteModal" />
   </div>
 </template>
 <script>
 import Vue from "vue"
-import utils from "~/plugins/utils"
-import { mapState } from "vuex"
 import DiffLabel from '~/components/DiffLabel.vue'
+import HistoryModal from '~/components/HistoryModal.vue'
+import TipsModal from '~/components/TipsModal.vue'
+import UnVoteModal from '~/components/UnVoteModal.vue'
+
 export default {
   components: {
-    DiffLabel
+    DiffLabel,
+    TipsModal,
+    HistoryModal,
+    UnVoteModal
   },
   data () {
     return {
@@ -76,6 +83,9 @@ export default {
       priceInfo:{},
       contractBalance:{},
       accountInfo:{},
+      historyList:[],
+      historyInfo:{},
+      showIndex:0,
       tokenbalance:0,
       votebalances:0
     }
@@ -98,60 +108,80 @@ export default {
           _this.getAccountInfo()
           _this.$common.getTokenBalcnce(account).then( res =>{
             _this.tokenbalance = res.balance
-            
           })
         }
       })
     },100)
     //资金池
     this.$common.getContractBalcnce().then( res =>{
-      console.log('res',res)
       this.contractBalance = res
     })
     //价格
     this.$common.getPrice().then( res =>{
-        console.log('res-',res)
       this.priceInfo = res
       this.price = res.price_ratio.toFixed(4)
     })
-    //历史获得记录
-    this.$common.getHistory().then( res =>{
-      console.log('history',res)
-    })
+    this.getObtainHistory()
   },
   methods:{
     //账户信息
     getAccountInfo(){
-      this.$rpc.blockchain.getAccountInfo('pwdev').then(account => {
-        console.log('account',account)
+      this.$rpc.blockchain.getAccountInfo(this.walletAccount).then(account => {
         this.accountInfo = account
         this.votebalances= account.vote_infos.reduce((reduced, vote) => vote.votes ? reduced + vote.votes : 0, 0)
       })
+    },
+    historyModal(type){
+      this.$refs['historyModal'].showModal(type)
+    },
+    ruleModal(type){
+      this.$refs['tipsModal'].showModal(type)
+    },
+    unvoteModal(){
+      this.$refs['unvoteModal'].showModal()
     },
     //路由
     toRoute (route) {
       this.$router.push(`/${route}`)
     },
-    fixedTwo(number){
+    historyChange(){
+      setInterval(() => {
+        if (this.showIndex > 20) {
+          this.getObtainHistory()
+          return
+        }
+        this.historyInfo = this.historyList[this.showIndex]
+        this.showIndex++
+      }, 3000);
+    },
+    getObtainHistory(){
+      //历史获得记录
+      this.$common.getObtainHistory().then( res =>{
+        this.historyList = res.data
+        this.showIndex = 0
+      })
+    },
+    fixedNumber(number,fixed){
       if (!number) {
         return 0
       }
-      number = String(number).replace(/^(.*\..{2}).*$/,"$1");
-      number = Number(number); 
+      let str = "^(.*\\..{" + fixed + "}).*$" 
+      number = String(number).replace( new RegExp(str),"$1");
+      number = Number(number)
       return number
     }
   },
-
-  async asyncData({ req, app, query, $axios }) {
-    const ip = await $axios.$get('http://icanhazip.com')
-    return {
-      ip: ip
-    }
-  },
-
-  watch:{
+  beforeDestroy(){
+    clearInterval()
   }
-};
+
+  // async asyncData({ req, app, query, $axios }) {
+  //   const ip = await $axios.$get('http://icanhazip.com')
+  //   return {
+  //     ip: ip
+  //   }
+  // },
+}
 </script>
 
 <style lang="scss" scoped>

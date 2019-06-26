@@ -9,7 +9,7 @@
               <b-link to="/">什么是ABCT ></b-link>
             </div>
             <div class="mt-8">
-              <span class="font-norwester fs-22" to="/">1 ABCT = {{price}} IOST</span>
+              <span class="font-norwester fs-22" to="/">1 ABCT = {{fixedNumber(price,6)}} IOST</span>
               <img class="switch" src="~/assets/imgs/icon_switch.svg" width="15">
             </div>
             <div class="mt-8">
@@ -48,7 +48,7 @@
         </div>
         <div class="mt-15">
           <div>我的ABCT：{{tokenbalance}}</div>
-          <div>当前兑换价格：1 ABCT = {{ '\xa0'+price+'\xa0'}}IOST  = {{'\xa0'+fixedNumber(priceInfo.price_usd,4) +'\xa0'}} </div>
+          <div>当前兑换价格：1 ABCT = {{ '\xa0'+fixedNumber(price,6)+'\xa0'}}IOST  = {{'\xa0'+fixedNumber(priceInfo.price_usd,6) +'\xa0'}} </div>
         </div>
       </div>
       <div class="exchange-btn mt-20" @click="toRoute('exchange')" >兑换IOST</div>
@@ -119,7 +119,7 @@ export default {
     //价格
     this.$common.getPrice().then( res =>{
       this.priceInfo = res
-      this.price = res.price_ratio.toFixed(4)
+      this.price = res.price_ratio
     })
     this.getObtainHistory()
   },
@@ -145,20 +145,23 @@ export default {
       this.$router.push(`/${route}`)
     },
     historyChange(){
-      setInterval(() => {
-        if (this.showIndex > 20) {
+      var timeInterval =setInterval(() => {
+        if (this.showIndex > 19) {
           this.getObtainHistory()
+          clearInterval(timeInterval)
           return
         }
         this.historyInfo = this.historyList[this.showIndex]
         this.showIndex++
-      }, 3000);
+      }, 2000);
     },
     getObtainHistory(){
       //历史获得记录
       this.$common.getObtainHistory().then( res =>{
         this.historyList = res.data
         this.showIndex = 0
+        this.historyInfo = this.historyList[this.showIndex]
+        this.historyChange()
       })
     },
     fixedNumber(number,fixed){

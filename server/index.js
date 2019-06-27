@@ -2,8 +2,10 @@ process.SERVER_BUILD = true
 
 const Koa = require('koa')
 const compress = require("koa-compress")
+const mount = require("koa-mount")
 const serve = require("koa-static")
 const consola = require('consola')
+const staticCache = require("./plugins/staticCache")
 const { Nuxt, Builder } = require('nuxt')
 
 const app = new Koa()

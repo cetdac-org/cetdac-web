@@ -11,18 +11,22 @@
       {{alertText}}
     </b-alert>
     <div class="info-view">
-      <div class="info-line">我的IOST：{{accountInfo.balance}}</div>
+      <div class="info-line" @click="voteNumber = fixedNumber(accountInfo.balance,6)">我的IOST：{{fixedNumber(accountInfo.balance,6)}}</div>
       <div class="info-line">投票中的IOST：{{votebalances}}</div>
       <div class="frozen-line">
         <span>冻结中的IOST：{{frozenbalances}}</span>
-        <span>马上赎回</span>
+        <span @click="unvoteModal">马上赎回</span>
       </div>
-      <div class="info-line">回购资金池：{{fixedNumber(contractBalance.balance,4)}}</div>
     </div>
     <div class="exchange-info mt-20">
-      <div class="font-norwester fs-22 scale-title">1 ABTC = {{ price }} IOST</div>
+      <div class="font-norwester fs-22 scale-title">1 ABTC = {{ fixedNumber(price,6)  }} IOST</div>
       <div class="scale-desc">投票给 IOSTABC 节点即可免费获得 ABCT</div>
-      <b-form-input v-model="voteNumber" placeholder=""></b-form-input>
+      <b-input-group>
+        <b-form-input v-model="voteNumber" placeholder=""></b-form-input>
+        <b-input-group-append>
+          <div class="all-btn" @click="voteNumber = fixedNumber(accountInfo.balance,6)">全部</div>
+        </b-input-group-append>
+      </b-input-group>
       <div class="scale-tip">投 1000 IOST，你每天将参与瓜分10000个 ABCT，当前IOSTABC总票数xxx,你每天可分得 20 ABCT = 40 IOST = ¥ xxx</div>
     </div>
     <div class="exchange-view">
@@ -37,6 +41,7 @@
     </div>
     <HistoryModal ref="historyModal" />
     <TipsModal ref="tipsModal" />
+    <UnVoteModal ref="unvoteModal" />
     <b-modal ref="statusModal" class="statusmodal" centered hide-footer hide-header>
       <p style="color:#000;">{{modalText}}</p>
       <p style="color:#000;">{{txhash}}</p>
@@ -49,11 +54,13 @@
 <script>
 import HistoryModal from '~/components/HistoryModal.vue'
 import TipsModal from '~/components/TipsModal.vue'
+import UnVoteModal from '~/components/UnVoteModal.vue'
 import IOST from 'iost'
 
 export default {
   components: {
     TipsModal,
+    UnVoteModal,
     HistoryModal
   },
   data(){
@@ -98,7 +105,7 @@ export default {
     })
     this.$common.getPrice().then( res =>{
       this.priceInfo = res
-      this.price = res.price_ratio.toFixed(4)
+      this.price = res.price_ratio
     })
   },
   methods:{
@@ -161,12 +168,27 @@ export default {
     ruleModal(type){
       this.$refs['tipsModal'].showModal(type)
     },
+    unvoteModal(){
+      this.$refs['unvoteModal'].showModal()
+    },
   }
   
 }
 </script>
 
 <style lang="scss" scoped>
+.input-group{
+  background-color: #0F0258;
+  .form-control{
+    color: #FFF;
+    background-color: #0F0258;
+    border: none;
+    border-radius: 10px;
+  }
+  .form-control:focus{
+    box-shadow: none;
+  }
+}
 .vote-web-view{
   padding: 15px;
   .info-view{
@@ -183,6 +205,12 @@ export default {
   .exchange-info{
     padding: 15px;
     background: #1F166B;
+    .all-btn{
+      color: #FF768A;
+      width: 60px;
+      line-height: 38px;
+      text-align: center;
+    }
     .scale-title{
       text-align: center;
     }

@@ -9,19 +9,20 @@
               <b-link to="/">什么是ABCT ></b-link>
             </div>
             <div class="mt-8">
-              <span class="font-norwester fs-22" to="/">1 ABCT = {{fixedNumber(price,6)}} IOST</span>
+              <!-- fixedNumber(price,6) -->
+              <span class="font-norwester fs-22" >1 ABCT = <span id="price">{{fixedNumber(price,6)}}</span> IOST</span>
               <img class="switch" src="~/assets/imgs/icon_switch.svg" width="15">
             </div>
             <div class="mt-8">
               <!-- <span class="fs-14" to="/">当日涨幅：<DiffLabel slot="activator" :diff="priceInfo.percent_change_24h" :formatter="(text) => fixedNumber(text,2) + '%'" tag="sup" class="fz-12" /></span> -->
               <!-- <span class="ml-5">|</span> -->
-              <span class="ml-5 fs-14" to="/">累计涨幅：<DiffLabel slot="activator" :diff="priceInfo.percent_change" :formatter="(text) => fixedNumber(text,2) + '%'" tag="sup" class="fz-12" /></span>
+              <span class="ml-5 fs-14" to="/">累计涨幅：<DiffLabel slot="activator" :diff="priceInfo.percent_change_ratio" :formatter="(text) => fixedNumber(text,2) + '%'" tag="sup" class="fz-12" /></span>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="records mt-15">
+    <div class="records mt-15 animated fadeOutUp slow">
       {{historyInfo.name + '\xa0'}} 刚刚获得了 {{ '\xa0'+fixedNumber(historyInfo.amount,4) + '\xa0'}} ABCT 
     </div>
     <div class="vote mt-15">
@@ -68,6 +69,7 @@ import DiffLabel from '~/components/DiffLabel.vue'
 import HistoryModal from '~/components/HistoryModal.vue'
 import TipsModal from '~/components/TipsModal.vue'
 import UnVoteModal from '~/components/UnVoteModal.vue'
+import {CountUp} from 'countUp.js'
 
 export default {
   components: {
@@ -87,7 +89,17 @@ export default {
       historyInfo:{},
       showIndex:0,
       tokenbalance:0,
-      votebalances:0
+      votebalances:0,
+      delay: 1000,
+      endVal: 120500,
+      options: {
+        useEasing: true,
+        useGrouping: true,
+        separator: ',',
+        decimal: '.',
+        prefix: '',
+        suffix: ''
+      }
     }
   },
   head() {
@@ -96,22 +108,25 @@ export default {
       ip: null,
     }
   },
-  
   mounted(){
     const _this = this
-    setTimeout(function(){
-      IWalletJS.enable().then((account) => {
-        if(!account) {
-          _this.walletAccount = null
-        } else {
-          _this.walletAccount = account
-          _this.getAccountInfo()
-          _this.$common.getTokenBalcnce(account).then( res =>{
-            _this.tokenbalance = res.balance
-          })
-        }
-      })
-    },100)
+    if(window.IWalletJS){
+      setTimeout(function(){
+        window.IWalletJS.enable().then((account) => {
+          if(!account) {
+            _this.walletAccount = null
+          } else {
+            _this.walletAccount = account
+            _this.getAccountInfo()
+            _this.$common.getTokenBalcnce(account).then( res =>{
+              _this.tokenbalance = res.balance
+            })
+          }
+        })
+      },100)
+    } else {
+      this.initIwallet()
+    }
     //资金池
     this.$common.getContractBalcnce().then( res =>{
       this.contractBalance = res
@@ -120,9 +135,21 @@ export default {
     this.$common.getPrice().then( res =>{
       this.priceInfo = res
       this.price = res.price_ratio
+      const options = {
+        startVal: this.fixedNumber(this.price,6),
+        decimalPlaces: 6,
+        duration: 6000,
+      };
+      let demo = new CountUp('price', this.fixedNumber(this.price,6) + 0.0005, options);
+      if (!demo.error) {
+        demo.start();
+      } else {
+        console.error(demo.error);
+      }
     })
     this.getObtainHistory()
-  },
+
+  },  
   methods:{
     //账户信息
     getAccountInfo(){
@@ -131,8 +158,13 @@ export default {
         this.votebalances= account.vote_infos.reduce((reduced, vote) => vote.votes ? reduced + vote.votes : 0, 0)
       })
     },
+    onReady(instance, CountUp) {
+      const that = this;
+      instance.update(that.endVal + 100);
+    },
     historyModal(type){
-      this.$refs['historyModal'].showModal(type)
+      // this.$refs['historyModal'].showModal(type)
+      location.reload()
     },
     ruleModal(type){
       this.$refs['tipsModal'].showModal(type)
@@ -145,11 +177,9 @@ export default {
       this.$router.push(`/${route}`)
     },
     historyChange(){
-      var timeInterval =setInterval(() => {
+      var timeInterval = setInterval(() => {
         if (this.showIndex > 19) {
-          this.getObtainHistory()
-          clearInterval(timeInterval)
-          return
+          this.showIndex = 0
         }
         this.historyInfo = this.historyList[this.showIndex]
         this.showIndex++
@@ -164,6 +194,26 @@ export default {
         this.historyChange()
       })
     },
+    initIwallet(){
+      const _this = this
+      var timeInterval = setInterval(() => {
+        if (window.IWalletJS) { 
+          clearInterval(timeInterval)
+          window.IWalletJS.enable().then((account) => {
+          console.log('account',account)
+          if(!account) {
+            _this.walletAccount = null
+          } else {
+            _this.walletAccount = account
+            _this.getAccountInfo()
+            _this.$common.getTokenBalcnce(account).then( res =>{
+              _this.tokenbalance = res.balance
+            })
+          }
+        })
+        }
+      }, 1000);
+    },
     fixedNumber(number,fixed){
       if (!number) {
         return 0
@@ -174,6 +224,7 @@ export default {
       return number
     }
   },
+  
   beforeDestroy(){
     clearInterval()
   }
@@ -231,7 +282,10 @@ export default {
   }
   .records {
     text-align: center;
-    color: #eee
+    color: #eee;
+    animation-duration: 2s;
+    // animation-delay: 1s;
+    animation-iteration-count: infinite;
   }
   .vote {
     a{

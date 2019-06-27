@@ -12,22 +12,26 @@
     </b-alert>
     <div class="info-view">
       <img class="icon-img" src="@/assets/imgs/icon_abc.svg">
-      <div class="ml-5">
-        <div>我的ABCT：{{tokenbalance}}</div>
-        <div>回购资金池：{{fixedNumber(contractBalance.balance,4)}}</div>
+      <div class="ml-5 abct-balance">
+        <div @click="exchangeNumber = tokenbalance">我的ABCT：{{tokenbalance}}</div>
       </div>
     </div>
     <div class="exchange-info mt-20">
-      <div class="scale-title font-norwester fs-22">1 ABTC = {{'\xa0' + price + '\xa0'}}IOST</div>
+      <div class="scale-title font-norwester fs-22">1 ABTC = {{'\xa0' + fixedNumber(price,6) + '\xa0'}}IOST</div>
       <div class="scale-desc">你可以在任何时间选择把 ABCT 兑换为IOST我们只收取0.5%的手续费</div>
-      <b-form-input v-model="exchangeNumber" placeholder=""></b-form-input>
+      <b-input-group>
+        <b-form-input v-model="exchangeNumber" placeholder=""></b-form-input>
+        <b-input-group-append>
+          <div class="all-btn" @click="exchangeNumber = tokenbalance">全部</div>
+        </b-input-group-append>
+      </b-input-group>
       <div class="scale-tip">兑换 1000 ABCT = 2000 IOST = ¥ xxx，及时到账</div>
     </div>
     <div class="exchange-view">
       <div class="icon-view">
         <img class="icon-img" src="@/assets/imgs/icon_abc.svg">
         <img class="icon-to" src="@/assets/imgs/icon_to.svg">
-        <img class="icon-img" src="@/assets/imgs/icon_token.svg">
+        <img class="icon-img" src="@/assets/imgs/icon_iost.svg">
       </div>
       <div class="exchange-btn mt-20" @click="exchange">兑换回 IOST</div>
       <div class="mt-10 history-tip" @click="historyModal('exchange')">我的兑换记录</div>
@@ -91,13 +95,14 @@ export default {
       this.contractBalance =  res
     })
     this.$common.getPrice().then( res =>{
-      this.price = this.fixedNumber(res.price_ratio,4)
+      this.price = res.price_ratio
     })
   },
   methods:{
     getTokenBalance(){
       this.$common.getTokenBalcnce(this.walletAccount).then( res =>{
         this.tokenbalance = res.balance
+        console.log(res,'--')
       })
     },
     exchange(){
@@ -158,6 +163,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.input-group{
+  background-color: #0F0258;
+  .form-control{
+    color: #FFF;
+    background-color: #0F0258;
+    border: none;
+    border-radius: 10px;
+  }
+  .form-control:focus{
+    box-shadow: none;
+  }
+}
 .exchange-web-view{
   padding: 15px;
   .info-view{
@@ -167,10 +184,20 @@ export default {
     .icon-img{
       height: 40px;
     }
+    .abct-balance{
+      display: flex;
+      align-items: center;
+    }
   }
   .exchange-info{
     padding: 15px;
     background: #1F166B;
+    .all-btn{
+      color: #FF768A;
+      width: 60px;
+      line-height: 38px;
+      text-align: center;
+    }
     .scale-title{
       text-align: center;
     }

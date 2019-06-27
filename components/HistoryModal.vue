@@ -48,15 +48,18 @@ export default {
   },
   mounted(){
     const _this = this
-    setTimeout(function(){
-      IWalletJS.enable().then((account) => {
-        if(!account) {
-          _this.walletAccount = null
-        } else {
-          _this.walletAccount = account
-        }
-      })
-    },100)  
+    if (window.IWalletJS) { 
+      setTimeout(function(){
+        IWalletJS.enable().then((account) => {
+          if(!account) {
+            _this.walletAccount = null
+          } else {
+            _this.walletAccount = account
+          }
+        })
+      },100)  
+    }
+    
   },
   methods:{
     showModal(type){

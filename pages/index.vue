@@ -163,8 +163,7 @@ export default {
       instance.update(that.endVal + 100);
     },
     historyModal(type){
-      // this.$refs['historyModal'].showModal(type)
-      location.reload()
+      this.$refs['historyModal'].showModal(type)
     },
     ruleModal(type){
       this.$refs['tipsModal'].showModal(type)

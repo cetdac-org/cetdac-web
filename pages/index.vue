@@ -22,8 +22,10 @@
         </div>
       </div>
     </div>
-    <div class="records mt-15 animated flipOutX slow">
-      {{historyInfo.name + '\xa0'}} 刚刚获得了 {{ '\xa0'+fixedNumber(historyInfo.amount,4) + '\xa0'}} ABCT 
+    <div class="records mt-15" style="overflow:hidden">
+      <div v-if="historyInfo" :class="['animated', historyDirect ==='in'?'slideInUp':'slideOutUp', 'infinite', 'slow']">
+        {{historyInfo.name + '\xa0'}} 刚刚获得了 {{ '\xa0'+fixedNumber(historyInfo.amount,4) + '\xa0'}} ABCT 
+      </div>
     </div>
     <div class="vote mt-15">
       <div class="vote-content d-flex">
@@ -89,7 +91,8 @@ export default {
       contractBalance:{},
       accountInfo:{},
       historyList:[],
-      historyInfo:{},
+      historyInfo:null,
+      historyDirect:'in',
       showIndex:0,
       tokenbalance:0,
       votebalances:0,
@@ -184,20 +187,29 @@ export default {
       this.$router.push(`/${route}`)
     },
     historyChange(){
+      this.historyInfo = this.historyList[this.showIndex]
+      this.historyDirect = 'in'
+      setTimeout(()=>{
+        this.historyDirect = 'out'
+      },2000)
+
       var timeInterval = setInterval(() => {
         if (this.showIndex > 19) {
           this.showIndex = 0
         }
         this.historyInfo = this.historyList[this.showIndex]
-        this.showIndex++
-      }, 2000);
+        this.historyDirect = 'in'
+        setTimeout(()=>{
+          this.historyDirect = 'out'
+        },2000)
+        this.showIndex ++
+      }, 4000);
     },
     getObtainHistory(){
       //历史获得记录
       this.$common.getObtainHistory().then( res =>{
         this.historyList = res.data
         this.showIndex = 0
-        this.historyInfo = this.historyList[this.showIndex]
         this.historyChange()
       })
     },

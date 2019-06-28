@@ -15,7 +15,7 @@
       <div class="info-line">投票中的IOST：{{votebalances}}</div>
       <div class="frozen-line">
         <span>冻结中的IOST：{{frozenbalances}}</span>
-        <span @click="unvoteModal">马上赎回</span>
+        <a href="javascript:;" style="color:#FF768A;" @click="unvoteModal">马上赎回</a>
       </div>
     </div>
     <div class="exchange-info mt-20">

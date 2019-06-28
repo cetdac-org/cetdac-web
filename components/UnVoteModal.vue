@@ -40,21 +40,6 @@ export default {
       walletAccount:''
     }
   },
-  mounted(){
-    const _this = this
-    if (window.IWalletJS) { 
-      setTimeout(function(){
-        IWalletJS.enable().then((account) => {
-          if(!account) {
-            _this.walletAccount = null
-          } else {
-            _this.walletAccount = account
-            _this.getAccountInfo()
-          }
-        })
-      },100)
-    }
-  },
   methods:{
     getAccountInfo(){
       this.$rpc.blockchain.getAccountInfo(this.walletAccount).then(account => {
@@ -62,6 +47,8 @@ export default {
       })
     },
     showModal(){
+      this.walletAccount = this.$store.getters.getWalletAccount
+      this.getAccountInfo()
       this.$refs['vote-modal'].show()
     },
     unVote(item){

@@ -19,15 +19,17 @@
       </div>
     </div>
     <div class="exchange-info mt-20">
-      <div class="font-norwester fs-22 scale-title">1 ABTC = {{ fixedNumber(price,6)  }} IOST</div>
+      <div class="font-norwester fs-22 scale-title">1 ABCT = <div id="price"></div> {{`${changeType=='ratio'?'IOST':/cn/i.test(lang.lang)?'CNY':'USD'}`}}
+        <img class="switch" src="~/assets/imgs/icon_switch.svg" @click="priceChange" width="15">
+      </div>
       <div class="scale-desc">投票给 IOSTABC 节点即可免费获得 ABCT</div>
       <b-input-group>
-        <b-form-input v-model="voteNumber" placeholder=""></b-form-input>
+        <b-form-input v-model="voteNumber" placeholder="" @update="inputChange"></b-form-input>
         <b-input-group-append>
           <div class="all-btn" @click="voteNumber = fixedNumber(accountInfo.balance,6)">全部</div>
         </b-input-group-append>
       </b-input-group>
-      <div class="scale-tip">投 1000 IOST，你每天将参与瓜分10000个 ABCT，当前IOSTABC总票数xxx,你每天可分得 20 ABCT = 40 IOST = ¥ xxx</div>
+      <div class="scale-tip">投 {{'\xa0'+(voteNumber || 10000)+'\xa0'}} IOST，你每天将参与瓜分{{'\xa0'+dayABCT+'\xa0'}}个 ABCT，当前IOSTABC总票数{{'\xa0'+parseInt(producerVotes) + '\xa0'}},你每天可分得  <div> {{'\xa0'+fixedNumber(abctNumber,6) + '\xa0'}} ABCT = {{'\xa0'+fixedNumber(iostNumber,6) + '\xa0'}} IOST = {{`${(/cn/i.test(lang.lang)?'￥ ':'$ ')+fixedNumber(priceNumber,6)}`}}</div> </div>
     </div>
     <div class="exchange-view">
       <div class="icon-view">
@@ -56,12 +58,17 @@ import HistoryModal from '~/components/HistoryModal.vue'
 import TipsModal from '~/components/TipsModal.vue'
 import UnVoteModal from '~/components/UnVoteModal.vue'
 import IOST from 'iost'
+import {CountUp} from 'countUp.js'
+import { mapState } from "vuex"
 
 export default {
   components: {
     TipsModal,
     UnVoteModal,
     HistoryModal
+  },
+  computed:{
+    ...mapState(["lang"]),
   },
   data(){
     return {
@@ -74,10 +81,21 @@ export default {
       tokenbalance:0,
       frozenbalances:0,
       votebalances:0,
+      producerVotes:'-',
+
+      abctNumber:'-',
+      iostNumber:'-',
+      priceNumber:'-',
+
+      dayABCT:86400,
+
+      startPrice:'',
+      endPrice:'',
+      changeType:'ratio',
 
       dismissSecs: 3,
       dismissCountDown: 0,
-
+      
       faileddes:'',
       modalText:'',
       txhash:''
@@ -89,24 +107,20 @@ export default {
     }
   },
   mounted () {
-    const _this = this
-    setTimeout(function(){
-      IWalletJS.enable().then((account) => {
-        if(!account) {
-          _this.walletAccount = null
-        } else {
-          _this.walletAccount = account
-          _this.getAccountInfo()
-        }
-      })
-    },100)
+    if (this.$store.getters.getWalletAccount) {
+      this.walletAccount = this.$store.getters.getWalletAccount
+      this.getAccountInfo()
+    } else{
+      this.initIwallet()
+    }
     this.$common.getContractBalcnce().then( res => {
       this.contractBalance = res
     })
-    this.$common.getPrice().then( res =>{
-      this.priceInfo = res
-      this.price = res.price_ratio
+    this.$common.getProducerInfo('iostabc').then( res => {
+      this.producerVotes = res.votes
     })
+    this.getPriceDown()
+    
   },
   methods:{
     getAccountInfo(){
@@ -149,10 +163,79 @@ export default {
         this.$refs.statusModal.show()
       })
     },
+    inputChange(){
+      this.abctNumber = ((this.voteNumber || 10000)/parseInt(this.producerVotes)) * this.dayABCT
+      this.iostNumber = this.abctNumber * this.priceInfo.price_ratio 
+      this.priceNumber = /cn/i.test(this.lang.lang)? this.abctNumber * this.priceInfo.price_cny : this.abctNumber * this.priceInfo.price_usd
+      if (this.priceNumber < 0.000001) {
+        this.priceNumber = 0.000001
+      }
+    },
+    initIwallet(){
+      const _this = this
+      var timeInterval = setInterval(() => {
+        if (window.IWalletJS) { 
+          window.IWalletJS.enable().then((account) => {
+          if(!account) {
+            _this.walletAccount = null
+          } else {
+            clearInterval(timeInterval)
+            _this.walletAccount = account
+            _this.$store.commit('setWalletAccount', account) 
+            _this.getAccountInfo()
+          }
+        })
+        }
+      }, 1000);
+    },
+    getPrice(){
+      this.$common.getPrice().then( res =>{
+        this.priceInfo = res
+        this.startPrice = this.priceInfo.price_ratio_10m_ago 
+        this.endPrice = this.priceInfo.price_ratio
+        this.inputChange()
+        this.priceAnmate()
+      })
+    },
+    getPriceDown(){
+      this.getPrice()
+      setInterval(() => {
+        this.getPrice()
+      },1000*610)
+    },
+    priceAnmate(){
+      const options = {
+        startVal: this.fixedNumber(this.startPrice ,10),
+        decimalPlaces: 10,
+        duration: 610,
+      };
+      let countdown = new CountUp('price', this.fixedNumber(this.endPrice ,10), options);
+      if (!countdown.error) {
+        countdown.start();
+      } else {
+        console.error(countdown.error);
+      }
+    },
+    priceChange(){
+      if (this.changeType == 'ratio') {
+        if (/cn/i.test(this.lang.lang)) {
+          this.startPrice = this.priceInfo.price_cny_10m_ago
+          this.endPrice = this.priceInfo.price_cny
+        } else {
+          this.startPrice = this.priceInfo.price_usd_10m_ago
+          this.endPrice = this.priceInfo.price_usd
+        }
+        this.changeType = 'price'
+      } else {
+        this.startPrice = this.priceInfo.price_ratio_10m_ago 
+        this.endPrice = this.priceInfo.price_ratio
+        this.changeType = 'ratio'
+      }
+      this.priceAnmate()
+    },
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown
     },
-    
     fixedNumber(number,fixed){
       if (!number) {
         return 0
@@ -205,6 +288,13 @@ export default {
   .exchange-info{
     padding: 15px;
     background: #1F166B;
+    #price{
+      display: inline-block;
+      width: 140px;
+    }
+    .switch{
+      margin-left:5px;
+    }
     .all-btn{
       color: #FF768A;
       width: 60px;

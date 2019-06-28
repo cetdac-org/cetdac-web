@@ -80,17 +80,12 @@ export default {
     }
   },
   mounted () {
-    const _this = this
-    setTimeout(function(){
-      IWalletJS.enable().then((account) => {
-        if(!account) {
-          _this.walletAccount = null
-        } else {
-          _this.walletAccount = account
-          _this.getTokenBalance()
-        }
-      })
-    },100)
+    if (this.$store.getters.getWalletAccount) {
+      this.walletAccount = this.$store.getters.getWalletAccount
+      this.getTokenBalance()
+    } else{
+      this.initIwallet()
+    }
     this.$common.getContractBalcnce().then( res => {
       this.contractBalance =  res
     })
@@ -102,7 +97,6 @@ export default {
     getTokenBalance(){
       this.$common.getTokenBalcnce(this.walletAccount).then( res =>{
         this.tokenbalance = res.balance
-        console.log(res,'--')
       })
     },
     exchange(){
@@ -138,6 +132,23 @@ export default {
         this.$refs.statusModal.show()
       })
 
+    },
+    initIwallet(){
+      const _this = this
+      var timeInterval = setInterval(() => {
+        if (window.IWalletJS) { 
+          window.IWalletJS.enable().then((account) => {
+          if(!account) {
+            _this.walletAccount = null
+          } else {
+            clearInterval(timeInterval)
+            _this.walletAccount = account
+            _this.$store.commit('setWalletAccount', account) 
+            _this.getTokenBalance()
+          }
+        })
+        }
+      }, 1000);
     },
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown

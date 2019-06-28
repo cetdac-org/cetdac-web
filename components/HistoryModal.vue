@@ -46,23 +46,9 @@ export default {
       }
     }
   },
-  mounted(){
-    const _this = this
-    if (window.IWalletJS) { 
-      setTimeout(function(){
-        IWalletJS.enable().then((account) => {
-          if(!account) {
-            _this.walletAccount = null
-          } else {
-            _this.walletAccount = account
-          }
-        })
-      },100)  
-    }
-    
-  },
   methods:{
     showModal(type){
+      this.walletAccount = this.$store.getters.getWalletAccount
       this.type = type
       this.getList(type)
       this.$refs['history-modal'].show()

@@ -1,11 +1,11 @@
-import Vue from "vue"
-import axios from "axios"
+import Vue from "./node_modules/vue"
+import axios from "./node_modules/axios"
 import {
 	serverApiDomain,
 	clientApiDomain,
 	protocol
 } from "./variables"
-import cookieParser from "~/plugins/cookies"
+import cookieParser from "./node_modules/~/plugins/cookies"
 //const store = createStore()
 
 export default ({

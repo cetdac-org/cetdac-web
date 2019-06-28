@@ -10,8 +10,8 @@
             </div>
             <div class="mt-8">
               <!-- fixedNumber(price,6) -->
-              <span class="font-norwester fs-22" >1 ABCT = <span id="price">{{fixedNumber(price,6)}}</span> IOST</span>
-              <img class="switch" src="~/assets/imgs/icon_switch.svg" width="15">
+              <span class="font-norwester fs-20" >1 ABCT = <div id="price"></div> {{`${changeType=='ratio'?'IOST':/cn/i.test(lang.lang)?'CNY':'USD'}`}}</span>
+              <img class="switch" src="~/assets/imgs/icon_switch.svg" @click="priceChange" width="15">
             </div>
             <div class="mt-8">
               <!-- <span class="fs-14" to="/">当日涨幅：<DiffLabel slot="activator" :diff="priceInfo.percent_change_24h" :formatter="(text) => fixedNumber(text,2) + '%'" tag="sup" class="fz-12" /></span> -->
@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-    <div class="records mt-15 animated fadeOutUp slow">
+    <div class="records mt-15 animated flipOutX slow">
       {{historyInfo.name + '\xa0'}} 刚刚获得了 {{ '\xa0'+fixedNumber(historyInfo.amount,4) + '\xa0'}} ABCT 
     </div>
     <div class="vote mt-15">
@@ -49,7 +49,7 @@
         </div>
         <div class="mt-15">
           <div>我的ABCT：{{tokenbalance}}</div>
-          <div>当前兑换价格：1 ABCT = {{ '\xa0'+fixedNumber(price,6)+'\xa0'}}IOST  = {{'\xa0'+fixedNumber(priceInfo.price_usd,6) +'\xa0'}} </div>
+          <div>兑换价格：1 ABCT = {{ '\xa0'+fixedNumber(priceInfo.price_ratio,6)+'\xa0'}}IOST  = {{'\xa0'+`${/cn/i.test(lang.lang)?fixedNumber(priceInfo.price_cny,6) +'\xa0'+'CNY':fixedNumber(priceInfo.price_usd,6)}`+'\xa0'+'USD'}} </div>
         </div>
       </div>
       <div class="exchange-btn mt-20" @click="toRoute('exchange')" >兑换IOST</div>
@@ -70,6 +70,7 @@ import HistoryModal from '~/components/HistoryModal.vue'
 import TipsModal from '~/components/TipsModal.vue'
 import UnVoteModal from '~/components/UnVoteModal.vue'
 import {CountUp} from 'countUp.js'
+import { mapState } from "vuex"
 
 export default {
   components: {
@@ -78,10 +79,12 @@ export default {
     HistoryModal,
     UnVoteModal
   },
+  computed:{
+    ...mapState(["lang"]),
+  },
   data () {
     return {
       walletAccount:'',
-      price:0,
       priceInfo:{},
       contractBalance:{},
       accountInfo:{},
@@ -90,16 +93,9 @@ export default {
       showIndex:0,
       tokenbalance:0,
       votebalances:0,
-      delay: 1000,
-      endVal: 120500,
-      options: {
-        useEasing: true,
-        useGrouping: true,
-        separator: ',',
-        decimal: '.',
-        prefix: '',
-        suffix: ''
-      }
+      startPrice:'',
+      endPrice:'',
+      changeType:'ratio'
     }
   },
   head() {
@@ -109,46 +105,14 @@ export default {
     }
   },
   mounted(){
-    const _this = this
-    if(window.IWalletJS){
-      setTimeout(function(){
-        window.IWalletJS.enable().then((account) => {
-          if(!account) {
-            _this.walletAccount = null
-          } else {
-            _this.walletAccount = account
-            _this.getAccountInfo()
-            _this.$common.getTokenBalcnce(account).then( res =>{
-              _this.tokenbalance = res.balance
-            })
-          }
-        })
-      },100)
-    } else {
-      this.initIwallet()
-    }
+    this.initIwallet()
     //资金池
     this.$common.getContractBalcnce().then( res =>{
       this.contractBalance = res
     })
     //价格
-    this.$common.getPrice().then( res =>{
-      this.priceInfo = res
-      this.price = res.price_ratio
-      const options = {
-        startVal: this.fixedNumber(this.price,6),
-        decimalPlaces: 6,
-        duration: 6000,
-      };
-      let demo = new CountUp('price', this.fixedNumber(this.price,6) + 0.0005, options);
-      if (!demo.error) {
-        demo.start();
-      } else {
-        console.error(demo.error);
-      }
-    })
+    this.getPriceDown()
     this.getObtainHistory()
-
   },  
   methods:{
     //账户信息
@@ -157,6 +121,50 @@ export default {
         this.accountInfo = account
         this.votebalances= account.vote_infos.reduce((reduced, vote) => vote.votes ? reduced + vote.votes : 0, 0)
       })
+    },
+    getPrice(){
+      this.$common.getPrice().then( res =>{
+        this.priceInfo = res
+        this.startPrice = this.priceInfo.price_ratio_10m_ago 
+        this.endPrice = this.priceInfo.price_ratio
+        this.priceAnmate()
+      })
+    },
+    getPriceDown(){
+      this.getPrice()
+      setInterval(() => {
+        this.getPrice()
+      },1000*610)
+    },
+    priceAnmate(){
+      const options = {
+        startVal: this.fixedNumber(this.startPrice ,10),
+        decimalPlaces: 10,
+        duration: 610,
+      };
+      let countdown = new CountUp('price', this.fixedNumber(this.endPrice ,10), options);
+      if (!countdown.error) {
+        countdown.start();
+      } else {
+        console.error(countdown.error);
+      }
+    },
+    priceChange(){
+      if (this.changeType == 'ratio') {
+        if (/cn/i.test(this.lang.lang)) {
+          this.startPrice = this.priceInfo.price_cny_10m_ago
+          this.endPrice = this.priceInfo.price_cny
+        } else {
+          this.startPrice = this.priceInfo.price_usd_10m_ago
+          this.endPrice = this.priceInfo.price_usd
+        }
+        this.changeType = 'price'
+      } else {
+        this.startPrice = this.priceInfo.price_ratio_10m_ago 
+        this.endPrice = this.priceInfo.price_ratio
+        this.changeType = 'ratio'
+      }
+      this.priceAnmate()
     },
     onReady(instance, CountUp) {
       const that = this;
@@ -197,13 +205,13 @@ export default {
       const _this = this
       var timeInterval = setInterval(() => {
         if (window.IWalletJS) { 
-          clearInterval(timeInterval)
           window.IWalletJS.enable().then((account) => {
-          console.log('account',account)
           if(!account) {
             _this.walletAccount = null
           } else {
+            clearInterval(timeInterval)
             _this.walletAccount = account
+            _this.$store.commit('setWalletAccount', account) 
             _this.getAccountInfo()
             _this.$common.getTokenBalcnce(account).then( res =>{
               _this.tokenbalance = res.balance
@@ -267,11 +275,16 @@ export default {
         align-items: center;
         height: 100%;
         .switch{
-          margin-left:10px;
+          margin-left:5px;
         }
         .banner-content-right{
           margin-left:12px;
           flex: 1;
+          #price{
+            text-align: center;
+            display: inline-block;
+            width: 130px;
+          }
           .rising {
             color: #0DB767;
           }
@@ -282,8 +295,7 @@ export default {
   .records {
     text-align: center;
     color: #eee;
-    animation-duration: 2s;
-    // animation-delay: 1s;
+    animation-duration: 2.01s;
     animation-iteration-count: infinite;
   }
   .vote {

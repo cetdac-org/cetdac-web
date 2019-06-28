@@ -34,6 +34,7 @@ module.exports = {
   */
   plugins: [
     "~/plugins/cookies",
+    '~/plugins/utils',
     { src: "~/plugins/i18n"},
     {src:'~/plugins/service', ssr:true},
     // { src: "~/plugins/exchangeAxios"},

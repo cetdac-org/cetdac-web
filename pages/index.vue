@@ -33,8 +33,11 @@
           <div>我的IOST：{{fixedNumber(accountInfo.balance,4)}}</div>
           <div class="on-voting d-flex mt-2">
             <span>投票中的IOST：{{votebalances}}</span>
-            <b-link  @click="unvoteModal()">马上赎回 ></b-link>
           </div>
+          <div class="frozen-line mt-2">
+              <span>冻结中的IOST：{{frozenbalances}}</span>
+              <b-link style="color:#FF768A;" @click="unvoteModal()">马上赎回</b-link>
+            </div>
         </div>
       </div>
       <div class="vote-btn mt-20" @click="toRoute('vote')">投票免费抢</div>
@@ -96,6 +99,7 @@ export default {
       showIndex:0,
       tokenbalance:0,
       votebalances:0,
+      frozenbalances:0,
       startPrice:'',
       endPrice:'',
       changeType:'ratio'
@@ -123,6 +127,7 @@ export default {
       this.$rpc.blockchain.getAccountInfo(this.walletAccount).then(account => {
         this.accountInfo = account
         this.votebalances= account.vote_infos.reduce((reduced, vote) => vote.votes ? reduced + vote.votes : 0, 0)
+        this.frozenbalances =  account.frozen_balances.reduce((reduced,frozen) => frozen.amount ? reduced+frozen.amount:0,0)
       })
     },
     getPrice(){
@@ -143,6 +148,7 @@ export default {
       const options = {
         startVal: this.fixedNumber(this.startPrice ,10),
         decimalPlaces: 10,
+        useEasing: false,
         duration: 610,
       };
       let countdown = new CountUp('price', this.fixedNumber(this.endPrice ,10), options);
@@ -293,7 +299,7 @@ export default {
           margin-left:12px;
           flex: 1;
           #price{
-            text-align: center;
+            text-align: left;
             display: inline-block;
             width: 130px;
           }
@@ -315,12 +321,15 @@ export default {
       color:#FF768A;
     }
     .vote-content {
-      padding:0 15px;
+      padding:15px 15px;
       align-items: center;
       background: #1F166B;
-      height: 76px;
       border-radius: 8px;
       .on-voting {
+        justify-content: space-between;
+      }
+      .frozen-line{
+        display: flex;
         justify-content: space-between;
       }
     }

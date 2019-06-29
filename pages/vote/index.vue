@@ -15,11 +15,11 @@
       <div class="info-line">投票中的IOST：{{votebalances}}</div>
       <div class="frozen-line">
         <span>冻结中的IOST：{{frozenbalances}}</span>
-        <a href="javascript:;" style="color:#FF768A;" @click="unvoteModal">马上赎回</a>
+        <b-link href="javascript:;" style="color:#FF768A;" @click="unvoteModal">马上赎回</b-link>
       </div>
     </div>
     <div class="exchange-info mt-20">
-      <div class="font-norwester fs-22 scale-title">1 ABCT = <div id="price"></div> {{`${changeType=='ratio'?'IOST':/cn/i.test(lang.lang)?'CNY':'USD'}`}}
+      <div class="font-norwester fs-22 scale-title">1 ABTC = {{'\xa0' + fixedNumber(price, 6) + '\xa0'}} {{`${changeType=='ratio'?'IOST':/cn/i.test(lang.lang)?'CNY':'USD'}`}}
         <img class="switch" src="~/assets/imgs/icon_switch.svg" @click="priceChange" width="15">
       </div>
       <div class="scale-desc">投票给 IOSTABC 节点即可免费获得 ABCT</div>
@@ -191,10 +191,8 @@ export default {
     getPrice(){
       this.$common.getPrice().then( res =>{
         this.priceInfo = res
-        this.startPrice = this.priceInfo.price_ratio_10m_ago 
-        this.endPrice = this.priceInfo.price_ratio
+        this.price = this.priceInfo.price_ratio
         this.inputChange()
-        this.priceAnmate()
       })
     },
     getPriceDown(){
@@ -203,35 +201,18 @@ export default {
         this.getPrice()
       },1000*610)
     },
-    priceAnmate(){
-      const options = {
-        startVal: this.fixedNumber(this.startPrice ,10),
-        decimalPlaces: 10,
-        duration: 610,
-      };
-      let countdown = new CountUp('price', this.fixedNumber(this.endPrice ,10), options);
-      if (!countdown.error) {
-        countdown.start();
-      } else {
-        console.error(countdown.error);
-      }
-    },
     priceChange(){
       if (this.changeType == 'ratio') {
         if (/cn/i.test(this.lang.lang)) {
-          this.startPrice = this.priceInfo.price_cny_10m_ago
-          this.endPrice = this.priceInfo.price_cny
+          this.price = this.priceInfo.price_cny
         } else {
-          this.startPrice = this.priceInfo.price_usd_10m_ago
-          this.endPrice = this.priceInfo.price_usd
+          this.price = this.priceInfo.price_usd
         }
         this.changeType = 'price'
       } else {
-        this.startPrice = this.priceInfo.price_ratio_10m_ago 
-        this.endPrice = this.priceInfo.price_ratio
+        this.price = this.priceInfo.price_ratio
         this.changeType = 'ratio'
       }
-      this.priceAnmate()
     },
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown

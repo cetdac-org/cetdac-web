@@ -1,6 +1,7 @@
 {
     "en_US": {
         ",每天可分得": ", 每天可分得",
+        "<返回": "< 返回",
         "IOST给IOS_fa07": "IOST 给 IOSTABC，你将参与瓜分每天",
         "个ABCT": "个 ABCT",
         "什么是ABCT": "什么是ABCT",
@@ -23,6 +24,7 @@
     },
     "zh_Hans_CN": {
         ",每天可分得": ", 每天可分得",
+        "<返回": "< 返回",
         "IOST给IOS_fa07": "IOST 给 IOSTABC，你将参与瓜分每天",
         "个ABCT": "个 ABCT",
         "什么是ABCT": "什么是ABCT",
@@ -45,6 +47,7 @@
     },
     "zh_Hant_HK": {
         ",每天可分得": ", 每天可分得",
+        "<返回": "< 返回",
         "IOST给IOS_0e8f@DEPRECATED@": "IOST 給IOSTABC，你將參與瓜分每天",
         "IOST给IOS_fa07": "IOST 給 IOSTABC，你將參與瓜分每天",
         "IOST，你将参_6f1f@DEPRECATED@": "IOST，你將參與瓜分每天",

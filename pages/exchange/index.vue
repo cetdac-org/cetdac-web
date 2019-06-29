@@ -10,14 +10,15 @@
     >
       {{alertText}}
     </b-alert>
-    <div class="info-view">
+    <b-link to="/" style="color:#FF768A;">< 返回</b-link>
+    <div class="mt-15 info-view">
       <img class="icon-img" src="@/assets/imgs/icon_abc.svg">
       <div class="ml-5 abct-balance">
         <div @click="exchangeNumber = tokenbalance;">我的ABCT：{{tokenbalance}}</div>
       </div>
     </div>
     <div class="exchange-info mt-20">
-      <div class="font-norwester fs-22 scale-title">1 ABCT = {{'\xa0' + fixedNumber(price, 6) + '\xa0'}} {{`${changeType=='ratio'?'IOST':/cn/i.test(lang.lang)?'CNY':'USD'}`}}
+      <div class="font-norwester fs-20 scale-title">1 ABCT = {{fixedNumber(price, 6)}} {{`${changeType=='ratio'?'IOST':/cn/i.test(lang.lang)?'CNY':'USD'}`}}
         <img class="switch" src="~/assets/imgs/icon_switch.svg" @click="priceChange" width="15">
       </div>
       <div class="scale-desc">你可以在任何时间选择把 ABCT 兑换为IOST我们只收取0.5%的手续费</div>
@@ -35,7 +36,7 @@
         <img class="icon-to" src="@/assets/imgs/icon_to.svg">
         <img class="icon-img" src="@/assets/imgs/icon_iost.svg">
       </div>
-      <div class="exchange-btn mt-20" @click="exchange">兑换回 IOST</div>
+      <div class="exchange-btn mt-20" @click="exchange">兑换 IOST</div>
       <div class="mt-10 history-tip" @click="historyModal('exchange')">我的兑换记录</div>
       <div class="mt-10 exchange-tip"><span @click="ruleModal('abct')">什么是ABCT</span> <span @click="ruleModal('publish')">发行规则</span> <span @click="ruleModal('exchange')">兑换规则</span></div>
     </div>
@@ -257,6 +258,9 @@ export default {
     .scale-tip{
       padding: 10px;
       color: rgba(255, 255, 255, 0.6);
+    }
+    .switch{
+      margin-left:5px;
     }
   }
   .exchange-view{

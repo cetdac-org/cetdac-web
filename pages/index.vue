@@ -10,8 +10,10 @@
             </div>
             <div class="mt-8">
               <!-- fixedNumber(price,6) -->
-              <span class="font-norwester fs-20" >1 ABCT = <div id="price"></div> {{`${changeType=='ratio'?'IOST':/cn/i.test(lang.lang)?'CNY':'USD'}`}}</span>
               <img class="switch" src="~/assets/imgs/icon_switch.svg" @click="priceChange" width="15">
+              <no-ssr>
+                <span :class="['font-norwester', /ios|ipad|iphone/i.test(navigator.userAgent)?'fs-20':'fs-18', 'ml-1']" >1 ABCT = <div id="price"></div>{{`${changeType=='ratio'?' IOST':/cn/i.test(lang.lang)?' CNY':' USD'}`}}</span>
+              </no-ssr>
             </div>
             <div class="mt-8">
               <!-- <span class="fs-14" to="/">当日涨幅：<DiffLabel slot="activator" :diff="priceInfo.percent_change_24h" :formatter="(text) => fixedNumber(text,2) + '%'" tag="sup" class="fz-12" /></span> -->
@@ -49,12 +51,11 @@
     <div class="exchange mt-20">
       <div class="exchange-tip">
         <div class="exchange-pool">
-          <span>回购资金池：{{fixedNumber(contractBalance.balance,2)}}</span>
-          <span @click="ruleModal('buy')">回购规则</span>
+          <span>兑换资金池：{{fixedNumber(contractBalance.balance,2)}}</span>
         </div>
-        <div class="mt-15">
-          <div>我的ABCT：{{tokenbalance}}</div>
-          <div>兑换价格：1 ABCT = {{ '\xa0'+fixedNumber(priceInfo.price_ratio,6)+'\xa0'}}IOST  = {{'\xa0'+`${/cn/i.test(lang.lang)?fixedNumber(priceInfo.price_cny,6) +'\xa0'+'CNY':fixedNumber(priceInfo.price_usd,6)}`+'\xa0'+'USD'}} </div>
+        <div>我的ABCT：{{tokenbalance}}</div>
+        <div class="mt-15 fb">
+          <div>1 ABCT = {{ '\xa0'+fixedNumber(priceInfo.price_ratio,6)+'\xa0'}}IOST  = {{'\xa0'+`${/cn/i.test(lang.lang)?fixedNumber(priceInfo.price_cny,6) +'\xa0'+'CNY':fixedNumber(priceInfo.price_usd,6)}`+'\xa0'+'USD'}} </div>
         </div>
       </div>
       <div class="exchange-btn mt-20" @click="toRoute('exchange')" >兑换IOST</div>
@@ -74,7 +75,7 @@ import DiffLabel from '~/components/DiffLabel.vue'
 import HistoryModal from '~/components/HistoryModal.vue'
 import TipsModal from '~/components/TipsModal.vue'
 import UnVoteModal from '~/components/UnVoteModal.vue'
-import { CountUp } from 'countUp.js';
+import { CountUp } from 'countup.js/dist/countUp';
 import { mapState } from "vuex"
 
 export default {
@@ -100,8 +101,10 @@ export default {
       tokenbalance:0,
       votebalances:0,
       frozenbalances:0,
+      navigator:{},
       startPrice:'',
       endPrice:'',
+      priceTimePercent:0,
       changeType:'ratio'
     }
   },
@@ -117,6 +120,7 @@ export default {
     this.$common.getContractBalcnce().then( res =>{
       this.contractBalance = res
     })
+    this.navigator = window.navigator
     //价格
     this.getPriceDown()
     this.getObtainHistory()
@@ -133,8 +137,20 @@ export default {
     getPrice(){
       this.$common.getPrice().then( res =>{
         this.priceInfo = res
-        this.startPrice = this.priceInfo.price_ratio_10m_ago 
-        this.endPrice = this.priceInfo.price_ratio
+        this.priceTimePercent = (+new Date() -  new Date(this.priceInfo.created_at)) / (600 * 1000)
+        if (this.changeType == 'price') {
+          if (/cn/i.test(this.lang.lang)) {
+            this.startPrice = this.priceInfo.price_cny_10m_ago + (this.priceInfo.price_cny - this.priceInfo.price_cny_10m_ago) * this.priceTimePercent
+            this.endPrice = this.priceInfo.price_cny
+          } else {
+            this.startPrice = this.priceInfo.price_usd_10m_ago + this.priceTimePercent * (this.priceInfo.price_usd - this.priceInfo.price_usd_10m_ago)
+            this.endPrice = this.priceInfo.price_usd
+          }
+        } else {
+          debugger
+          this.startPrice = this.priceInfo.price_ratio_10m_ago + this.priceTimePercent * (this.priceInfo.price_ratio - this.priceInfo.price_ratio_10m_ago)
+          this.endPrice = this.priceInfo.price_ratio
+        }
         this.priceAnmate()
       })
     },
@@ -142,42 +158,43 @@ export default {
       this.getPrice()
       setInterval(() => {
         this.getPrice()
-      },1000*610)
+      },610 * 1000)
     },
     priceAnmate(){
       const options = {
         startVal: this.fixedNumber(this.startPrice ,10),
         decimalPlaces: 10,
         useEasing: false,
-        duration: 610,
+        duration: 610 * (1 - this.priceTimePercent),
       };
-      let countdown = new CountUp('price', this.fixedNumber(this.endPrice ,10), options);
+      let countdown = new CountUp('price', this.fixedNumber(this.endPrice ,10), options)
       if (!countdown.error) {
-        countdown.start();
+        countdown.start()
       } else {
         console.error(countdown.error);
       }
     },
     priceChange(){
+      this.priceTimePercent = (+new Date() -  new Date(this.priceInfo.created_at)) / (600 * 1000)
       if (this.changeType == 'ratio') {
         if (/cn/i.test(this.lang.lang)) {
-          this.startPrice = this.priceInfo.price_cny_10m_ago
+          this.startPrice = this.priceInfo.price_cny_10m_ago + (this.priceInfo.price_cny - this.priceInfo.price_cny_10m_ago) * this.priceTimePercent
           this.endPrice = this.priceInfo.price_cny
         } else {
-          this.startPrice = this.priceInfo.price_usd_10m_ago
+          this.startPrice = this.priceInfo.price_usd_10m_ago + this.priceTimePercent * (this.priceInfo.price_usd - this.priceInfo.price_usd_10m_ago)
           this.endPrice = this.priceInfo.price_usd
         }
         this.changeType = 'price'
       } else {
-        this.startPrice = this.priceInfo.price_ratio_10m_ago 
+        this.startPrice = this.priceInfo.price_ratio_10m_ago + this.priceTimePercent * (this.priceInfo.price_ratio - this.priceInfo.price_ratio_10m_ago)
         this.endPrice = this.priceInfo.price_ratio
         this.changeType = 'ratio'
       }
       this.priceAnmate()
     },
     onReady(instance, CountUp) {
-      const that = this;
-      instance.update(that.endVal + 100);
+      const that = this
+      instance.update(that.endVal + 100)
     },
     historyModal(type){
       this.$refs['historyModal'].showModal(type)
@@ -244,7 +261,7 @@ export default {
         return 0
       }
       let str = "^(.*\\..{" + fixed + "}).*$" 
-      number = String(number).replace( new RegExp(str),"$1");
+      number = String(number).replace( new RegExp(str),"$1")
       number = Number(number)
       return number
     }
@@ -301,7 +318,6 @@ export default {
           #price{
             text-align: left;
             display: inline-block;
-            width: 130px;
           }
           .rising {
             color: #0DB767;

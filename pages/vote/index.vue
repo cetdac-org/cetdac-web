@@ -10,7 +10,8 @@
     >
       {{alertText}}
     </b-alert>
-    <div class="info-view">
+    <b-link to="/" style="color:#FF768A;">< 返回</b-link>
+    <div class="mt-15 info-view">
       <div class="info-line" @click="voteNumber = fixedNumber(accountInfo.balance,6)">我的IOST：{{fixedNumber(accountInfo.balance,6)}}</div>
       <div class="info-line">投票中的IOST：{{votebalances}}</div>
       <div class="frozen-line">
@@ -19,7 +20,7 @@
       </div>
     </div>
     <div class="exchange-info mt-20">
-      <div class="font-norwester fs-22 scale-title">1 ABCT = {{'\xa0' + fixedNumber(price, 6) + '\xa0'}} {{`${changeType=='ratio'?'IOST':/cn/i.test(lang.lang)?'CNY':'USD'}`}}
+      <div class="font-norwester fs-20 scale-title">1 ABCT = {{fixedNumber(price, 6)}} {{`${changeType=='ratio'?'IOST':/cn/i.test(lang.lang)?'CNY':'USD'}`}}
         <img class="switch" src="~/assets/imgs/icon_switch.svg" @click="priceChange" width="15">
       </div>
       <div class="scale-desc">投票给 IOSTABC 节点即可免费获得 ABCT</div>

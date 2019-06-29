@@ -1,5 +1,6 @@
 process.SERVER_BUILD = true
 
+const path = require('path')
 const Koa = require('koa')
 const compress = require("koa-compress")
 const mount = require("koa-mount")

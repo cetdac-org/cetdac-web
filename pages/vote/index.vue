@@ -62,7 +62,6 @@ import HistoryModal from '~/components/HistoryModal.vue'
 import TipsModal from '~/components/TipsModal.vue'
 import UnVoteModal from '~/components/UnVoteModal.vue'
 import IOST from 'iost'
-import {CountUp} from 'countUp.js'
 import { mapState } from "vuex"
 
 export default {

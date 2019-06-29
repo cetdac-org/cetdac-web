@@ -74,7 +74,7 @@ import DiffLabel from '~/components/DiffLabel.vue'
 import HistoryModal from '~/components/HistoryModal.vue'
 import TipsModal from '~/components/TipsModal.vue'
 import UnVoteModal from '~/components/UnVoteModal.vue'
-import {CountUp} from 'countUp.js'
+import {CountUp} from 'countup.js'
 import { mapState } from "vuex"
 
 export default {

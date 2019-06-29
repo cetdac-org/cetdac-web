@@ -13,19 +13,21 @@
     <div class="info-view">
       <img class="icon-img" src="@/assets/imgs/icon_abc.svg">
       <div class="ml-5 abct-balance">
-        <div @click="exchangeNumber = tokenbalance">我的ABCT：{{tokenbalance}}</div>
+        <div @click="exchangeNumber = tokenbalance;">我的ABCT：{{tokenbalance}}</div>
       </div>
     </div>
     <div class="exchange-info mt-20">
-      <div class="scale-title font-norwester fs-22">1 ABTC = {{'\xa0' + fixedNumber(price,6) + '\xa0'}}IOST</div>
+      <div class="font-norwester fs-22 scale-title">1 ABCT = {{'\xa0' + fixedNumber(price, 6) + '\xa0'}} {{`${changeType=='ratio'?'IOST':/cn/i.test(lang.lang)?'CNY':'USD'}`}}
+        <img class="switch" src="~/assets/imgs/icon_switch.svg" @click="priceChange" width="15">
+      </div>
       <div class="scale-desc">你可以在任何时间选择把 ABCT 兑换为IOST我们只收取0.5%的手续费</div>
       <b-input-group>
-        <b-form-input v-model="exchangeNumber" placeholder=""></b-form-input>
+        <b-form-input focus v-model="exchangeNumber" placeholder="" @update="inputChange"></b-form-input>
         <b-input-group-append>
-          <div class="all-btn" @click="exchangeNumber = tokenbalance">全部</div>
+          <div class="all-btn" @click="exchangeNumber = tokenbalance;inputChange()">全部</div>
         </b-input-group-append>
       </b-input-group>
-      <div class="scale-tip">兑换 1000 ABCT = 2000 IOST = ¥ xxx，及时到账</div>
+      <div class="scale-tip">{{exchangeNumber || 0}} ABCT = {{fixedNumber(exchangeNumber * price, 6)}} IOST = {{ priceNumber + (/cn/i.test(lang.lang)?" CNY":" USD") }}</div>
     </div>
     <div class="exchange-view">
       <div class="icon-view">
@@ -51,6 +53,7 @@
 <script>
 import HistoryModal from '~/components/HistoryModal.vue'
 import TipsModal from '~/components/TipsModal.vue'
+import { mapState } from "vuex"
 import IOST from 'iost'
 
 export default {
@@ -58,15 +61,24 @@ export default {
     TipsModal,
     HistoryModal
   },
+  computed:{
+    ...mapState(["lang"]),
+  },
   data(){
     return {
-      exchangeNumber:'',
+      exchangeNumber: '',
       price:0,
+      priceInfo: {},
+      changeType: 'ratio',
       contractBalance:{},
       accountInfo:{},
       tokenbalance:0,
       dismissSecs: 3,
       dismissCountDown: 0,
+
+      abctNumber:'-',
+      iostNumber:'-',
+      priceNumber:'-',
 
       alertText:'',
       faileddes:'',
@@ -89,15 +101,26 @@ export default {
     this.$common.getContractBalcnce().then( res => {
       this.contractBalance =  res
     })
-    this.$common.getPrice().then( res =>{
-      this.price = res.price_ratio
-    })
+    this.getPriceDown()
   },
   methods:{
     getTokenBalance(){
       this.$common.getTokenBalcnce(this.walletAccount).then( res =>{
         this.tokenbalance = res.balance
       })
+    },
+    getPrice(){
+      this.$common.getPrice().then( res =>{
+        this.priceInfo = res
+        this.price = this.priceInfo.price_ratio
+        this.inputChange()
+      })
+    },
+    getPriceDown(){
+      this.getPrice()
+      setInterval(() => {
+        this.getPrice()
+      },1000*610)
     },
     exchange(){
       if (this.exchangeNumber < 1) {
@@ -131,7 +154,9 @@ export default {
         this.faileddes = failed
         this.$refs.statusModal.show()
       })
-
+    },
+    inputChange(){
+      this.priceNumber = this.fixedNumber(/cn/i.test(this.lang.lang)? this.exchangeNumber * this.priceInfo.price_cny : this.exchangeNumber * this.priceInfo.price_usd, 6)
     },
     initIwallet(){
       const _this = this
@@ -149,6 +174,19 @@ export default {
         })
         }
       }, 1000);
+    },
+    priceChange(){
+      if (this.changeType == 'ratio') {
+        if (/cn/i.test(this.lang.lang)) {
+          this.price = this.priceInfo.price_cny
+        } else {
+          this.price = this.priceInfo.price_usd
+        }
+        this.changeType = 'price'
+      } else {
+        this.price = this.priceInfo.price_ratio
+        this.changeType = 'ratio'
+      }
     },
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown

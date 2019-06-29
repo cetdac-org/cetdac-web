@@ -19,17 +19,21 @@
       </div>
     </div>
     <div class="exchange-info mt-20">
-      <div class="font-norwester fs-22 scale-title">1 ABTC = {{'\xa0' + fixedNumber(price, 6) + '\xa0'}} {{`${changeType=='ratio'?'IOST':/cn/i.test(lang.lang)?'CNY':'USD'}`}}
+      <div class="font-norwester fs-22 scale-title">1 ABCT = {{'\xa0' + fixedNumber(price, 6) + '\xa0'}} {{`${changeType=='ratio'?'IOST':/cn/i.test(lang.lang)?'CNY':'USD'}`}}
         <img class="switch" src="~/assets/imgs/icon_switch.svg" @click="priceChange" width="15">
       </div>
       <div class="scale-desc">投票给 IOSTABC 节点即可免费获得 ABCT</div>
       <b-input-group>
         <b-form-input v-model="voteNumber" placeholder="" @update="inputChange"></b-form-input>
         <b-input-group-append>
-          <div class="all-btn" @click="voteNumber = fixedNumber(accountInfo.balance,6)">全部</div>
+          <div class="all-btn" @click="voteNumber = fixedNumber(accountInfo.balance,6);inputChange()">全部</div>
         </b-input-group-append>
       </b-input-group>
-      <div class="scale-tip">投 {{'\xa0'+(voteNumber || 10000)+'\xa0'}} IOST，你每天将参与瓜分{{'\xa0'+dayABCT+'\xa0'}}个 ABCT，当前IOSTABC总票数{{'\xa0'+parseInt(producerVotes) + '\xa0'}},你每天可分得  <div> {{'\xa0'+fixedNumber(abctNumber,6) + '\xa0'}} ABCT = {{'\xa0'+fixedNumber(iostNumber,6) + '\xa0'}} IOST = {{`${(/cn/i.test(lang.lang)?'￥ ':'$ ')+fixedNumber(priceNumber,6)}`}}</div> </div>
+      <div style="padding:10px">
+        <div class="scale-tip">投 {{'\xa0'+(voteNumber || 0)+'\xa0'}} IOST 给 IOSTABC，你将参与瓜分每天{{'\xa0'+dayABCT+'\xa0'}}个 ABCT</div>
+        <div class="scale-tip">当前IOSTABC总票数{{'\xa0'+parseInt(producerVotes) + '\xa0'}}, 每天可分得 {{'\xa0'+fixedNumber(abctNumber,6) + '\xa0'}} ABCT </div> 
+        <div class="scale-tip mt-2 fb">{{fixedNumber(abctNumber,6) + '\xa0'}} ABCT = {{'\xa0'+fixedNumber(iostNumber,6) + '\xa0'}} IOST = {{fixedNumber(priceNumber,6) + (/cn/i.test(lang.lang)?' CNY':' USD')}}</div>
+      </div>
     </div>
     <div class="exchange-view">
       <div class="icon-view">
@@ -164,7 +168,7 @@ export default {
       })
     },
     inputChange(){
-      this.abctNumber = ((this.voteNumber || 10000)/parseInt(this.producerVotes)) * this.dayABCT
+      this.abctNumber = ((this.voteNumber || 0)/parseInt(this.producerVotes)) * this.dayABCT
       this.iostNumber = this.abctNumber * this.priceInfo.price_ratio 
       this.priceNumber = /cn/i.test(this.lang.lang)? this.abctNumber * this.priceInfo.price_cny : this.abctNumber * this.priceInfo.price_usd
       if (this.priceNumber < 0.000001) {
@@ -290,7 +294,6 @@ export default {
       padding: 20px;
     }
     .scale-tip{
-      padding: 10px;
       line-height: 20px;
       color: rgba(255, 255, 255, 0.6);
     }

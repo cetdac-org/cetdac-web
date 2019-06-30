@@ -18,7 +18,7 @@
             <div class="mt-8">
               <!-- <span class="fs-14" to="/">当日涨幅：<DiffLabel slot="activator" :diff="priceInfo.percent_change_24h" :formatter="(text) => fixedNumber(text,2) + '%'" tag="sup" class="fz-12" /></span> -->
               <!-- <span class="ml-5">|</span> -->
-              <span class="ml-5 fs-14" to="/">累计涨幅：<DiffLabel slot="activator" :diff="priceInfo.percent_change_ratio" :formatter="(text) => fixedNumber(text,2) + '%'" tag="sup" class="fz-12" /></span>
+              <span class="ml-5 fs-14" to="/">涨幅：<DiffLabel slot="activator" :diff="changeType=='ratio'?priceInfo.percent_change_ratio:priceInfo.percent_change_price" :formatter="(text) => fixedNumber(text,2) + '%'" tag="sup" class="fz-12" /></span>
             </div>
           </div>
         </div>
@@ -55,7 +55,7 @@
         </div>
         <div>我的ABCT：{{tokenbalance}}</div>
         <div class="mt-15 fb">
-          <div>1 ABCT = {{ '\xa0'+fixedNumber(priceInfo.price_ratio,6)+'\xa0'}}IOST  = {{'\xa0'+`${/cn/i.test(lang.lang)?fixedNumber(priceInfo.price_cny,6) +'\xa0'+'CNY':fixedNumber(priceInfo.price_usd,6)}`+'\xa0'+'USD'}} </div>
+          <div>1 ABCT = {{ '\xa0'+fixedNumber(priceInfo.price_ratio,6)+'\xa0'}}IOST  = {{/cn/i.test(lang.lang)?(fixedNumber(priceInfo.price_cny,6) +'\xa0'+'CNY'):(fixedNumber(priceInfo.price_usd,6)+'\xa0'+'USD')}} </div>
         </div>
       </div>
       <div class="exchange-btn mt-20" @click="toRoute('exchange')" >兑换IOST</div>
@@ -147,7 +147,6 @@ export default {
             this.endPrice = this.priceInfo.price_usd
           }
         } else {
-          debugger
           this.startPrice = this.priceInfo.price_ratio_10m_ago + this.priceTimePercent * (this.priceInfo.price_ratio - this.priceInfo.price_ratio_10m_ago)
           this.endPrice = this.priceInfo.price_ratio
         }

@@ -63,13 +63,13 @@
     </div>
     <div class="exchange mt-20">
       <div class="exchange-tip">
-        <div class="exchange-pool">
-          <span class="fb">兑换资金池：{{fixedNumber(contractBalance.balance,2)+ '\xa0 IOST'}}  </span>
-          <img class="icon_largerise" src="~/assets/imgs/icon_largerise2.svg">
-        </div>
-        <div class="abct-text">我的ABCT：{{tokenbalance}}</div>
-        <div class="mt-15 fb">
+        <div class="abct-text fb  ">我的ABCT：{{tokenbalance}}</div>
+        <div class="fb">
           <div>1 ABCT = {{ '\xa0'+fixedNumber(priceInfo.price_ratio,6)+'\xa0'}}IOST  = {{/cn/i.test(lang.lang)?(fixedNumber(priceInfo.price_cny,6) +'\xa0'+'CNY'):(fixedNumber(priceInfo.price_usd,6)+'\xa0'+'USD')}} </div>
+        </div>
+        <div class="exchange-pool mt-15">
+          <span>兑换资金池：{{fixedNumber(contractBalance.balance,2)+ '\xa0 IOST'}}  </span>
+          <img class="icon_largerise" src="~/assets/imgs/icon_largerise2.svg">
         </div>
       </div>
       <div class="exchange-btn mt-20" @click="toRoute('exchange')" >兑换IOST</div>
@@ -393,6 +393,8 @@ export default {
         .icon_largerise{
           height: 11px;
         }
+        border-top: 1px solid #322886;
+        padding-top: 10px;
       }
       .abct-text{
         line-height: 30px;

@@ -1,5 +1,5 @@
 <template>
-  <b-modal centered ref="history-modal" class="modal" @hide="modalHide">
+  <b-modal centered ref="history-modal" class="modal" hide-footer @hide="modalHide">
     <div class="nodata-view" v-if="(issueList.length == 0 && type == 'issue') || (exchangeList.length == 0&& type == 'exchange') ">
       暂无数据
     </div>

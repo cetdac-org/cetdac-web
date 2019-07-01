@@ -41,7 +41,7 @@ export default {
       },
       type:'abct',
       fields:[
-        {key:'vote',label:'所票数'},
+        {key:'vote',label:'所投票数'},
         {key:'abctnumber',label:'分红ABCT/日'},
         {key:'votes',label:'节点票数(浮动)'},
         {key:'iostnumber',label:'回购资金/日'},

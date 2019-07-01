@@ -39,7 +39,7 @@ export default function API(axios) {
       })
     },
     getExchangeHistory (account, { page = 1, size = 20 } = {}) {
-      return axios.get(`${apiUrl}/exchangeobtainabct`,{
+      return axios.get(`${apiUrl}/abct/exchangeobtainabct`,{
         params: {
           account,
           page,

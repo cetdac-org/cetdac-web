@@ -1,12 +1,25 @@
 <template>
   <div class="abct-web-index">
+    <b-alert
+      :variant="variant"
+      fade
+      :show="dismissCountDown"
+      @dismissed="dismissCountDown=0"
+      @dismiss-count-down="countDownChanged"
+    >
+      <div>{{alertText}}</div>
+      <div class="mt-2" v-if="faileddes != ''">
+        {{faileddes.message||faileddes}}
+      </div>
+    </b-alert>
+
     <div class="banner-bg">
       <div class="banner">
         <div class="banner-content d-flex">
           <img class="icon-abct" src="~/assets/imgs/icon_abct.svg" width="75">
           <div class="banner-content-right">
             <div>
-              <span @click="ruleModal('abct')">什么是ABCT ></span>
+              <span @click="ruleModal('abct')">什么是ABCT</span>
             </div>
             <div class="mt-8">
               <!-- fixedNumber(price,6) -->
@@ -45,7 +58,7 @@
       <div class="vote-btn mt-20" @click="toRoute('vote')">投票免费抢</div>
       <div class="tips-view mt-15">
         <span @click="historyModal('issue')">我的分红记录</span>
-        <span @click="ruleModal('issue')">发行规则？</span>
+        <span @click="ruleModal('issue')">发行规则</span>
       </div>
     </div>
     <div class="exchange mt-20">
@@ -62,12 +75,12 @@
       <div class="exchange-btn mt-20" @click="toRoute('exchange')" >兑换IOST</div>
       <div class="tips-view mt-15">
         <span @click="historyModal('exchange')">我的兑换记录</span>
-        <span @click="ruleModal('exchange')">兑换规则？</span>
+        <span @click="ruleModal('exchange')">兑换规则</span>
       </div>
     </div>
     <HistoryModal ref="historyModal" />
     <TipsModal ref="tipsModal" />
-    <UnVoteModal ref="unvoteModal" />
+    <UnVoteModal ref="unvoteModal" @unVote="unvoteTip" />
   </div>
 </template>
 <script>
@@ -107,7 +120,12 @@ export default {
       endPrice:'',
       priceTimePercent:0,
       font_size:'fs-20',
-      changeType:'ratio'
+      changeType:'ratio',
+      dismissSecs: 3,
+      dismissCountDown: 0,
+      variant:'danger',
+      alertText:'',
+      faileddes:'',
     }
   },
   head() {
@@ -157,6 +175,17 @@ export default {
         }
         this.priceAnmate()
       })
+    },
+    unvoteTip(data){
+      this.variant = data.status == 'success' ?'success':'danger'
+      this.alertText = data.text
+      if (data.faileddes) {
+        this.faileddes = data.faileddes
+      }
+      this.dismissCountDown = this.dismissSecs
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
     },
     getPriceDown(){
       this.getPrice()

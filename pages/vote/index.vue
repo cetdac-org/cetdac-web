@@ -1,14 +1,16 @@
 <template>
   <div class="vote-web-view">
     <b-alert
-      variant="danger"
-      dismissible
+      :variant="variant"
       fade
       :show="dismissCountDown"
       @dismissed="dismissCountDown=0"
       @dismiss-count-down="countDownChanged"
     >
-      {{alertText}}
+      <div>{{alertText}}</div>
+      <div class="mt-2" v-if="faileddes != ''">
+        {{faileddes.message||faileddes}}
+      </div>
     </b-alert>
     <b-link to="/" style="color:#FF768A;">{{backStr}}</b-link>
     <div class="mt-15 info-view">
@@ -16,7 +18,7 @@
       <div class="info-line">投票中的IOST：{{votebalances}}</div>
       <div class="frozen-line">
         <span>冻结中的IOST：{{frozenbalances}}</span>
-        <b-link href="javascript;" style="color:#FF768A;" @click="unvoteModal">马上赎回</b-link>
+        <b-link style="color:#FF768A;" @click="unvoteModal">马上赎回</b-link>
       </div>
     </div>
     <div class="exchange-info mt-20">
@@ -48,14 +50,7 @@
     </div>
     <HistoryModal ref="historyModal" />
     <TipsModal ref="tipsModal" />
-    <UnVoteModal ref="unvoteModal" />
-    <b-modal ref="statusModal" class="statusmodal" centered hide-footer hide-header>
-      <p style="color:#000;">{{modalText}}</p>
-      <p style="color:#000;">{{txhash}}</p>
-      <div class="mt-2" v-if="faileddes != ''">
-        {{faileddes.message||faileddes}}
-      </div>
-    </b-modal>
+    <UnVoteModal ref="unvoteModal" @unVote="unvoteTip" />
   </div>
 </template>
 <script>
@@ -100,10 +95,8 @@ export default {
 
       dismissSecs: 3,
       dismissCountDown: 0,
-      
+      variant:'danger',
       faileddes:'',
-      modalText:'',
-      txhash:''
     }
   },
   head() {
@@ -137,11 +130,13 @@ export default {
     },
     vote(){
       if (this.voteNumber < 1) {
+        this.variant = 'danger'
         this.alertText = '投票数量不能小于1'
         this.dismissCountDown = this.dismissSecs
         return
       } 
       if (this.voteNumber > this.accountInfo.balance) {
+        this.variant = 'danger'
         this.alertText = '投票数量超过可使用余额'
         this.dismissCountDown = this.dismissSecs
         return
@@ -153,20 +148,30 @@ export default {
         
       })
       .on('success', (result) => {
-        this.modalText = '投票成功'
-        this.txhash = result.tx_hash
+        this.variant = 'success'
+        this.alertText = '投票成功'
         this.voteNumber = ''
-        this.$refs.statusModal.show()
         this.getAccountInfo()
+        this.dismissCountDown = this.dismissSecs
+
       })
       .on('failed', (failed) => {
         if (/rejected/i.test(failed)) {
           return
         }
-        this.modalText = '投票失败'
+        this.variant = 'danger'
+        this.alertText = '投票失败'
         this.faileddes = failed
-        this.$refs.statusModal.show()
+        this.dismissCountDown = this.dismissSecs
       })
+    },
+    unvoteTip(data){
+      this.variant = data.status == 'success' ?'success':'danger'
+      this.alertText = data.text
+      if (data.faileddes) {
+        this.faileddes = data.faileddes
+      }
+      this.dismissCountDown = this.dismissSecs
     },
     inputChange(){
       this.abctNumber = ((this.voteNumber || 0)/parseInt(this.producerVotes)) * this.dayABCT

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal centered ref="vote-modal" class="modal">
+    <b-modal centered ref="vote-modal" hide-footer class="modal">
       <div class="nodata-view" v-if="voteList.length<1">
         暂无数据
       </div>
@@ -10,18 +10,6 @@
             <span>节点：{{item.option}}</span> <span >票数：{{item.votes}}</span>  <div class="unvote-btn" @click="unVote(item)">取消投票</div>
           </b-list-group-item>
         </b-list-group>
-      </div>
-      <template slot="modal-footer" slot-scope="{cancel}">
-        <b-button size="sm" @click="cancel()">
-          Cancel
-        </b-button>
-      </template>
-    </b-modal>
-    <b-modal ref="statusModal" class="statusmodal" centered hide-footer hide-header>
-      <p style="color:#000;">{{modalText}}</p>
-      <p style="color:#000;">{{txhash}}</p>
-      <div class="mt-2" style="color:#000;" v-if="faileddes != ''">
-        {{faileddes.message||faileddes}}
       </div>
     </b-modal>
   </div>
@@ -34,10 +22,7 @@ export default {
   data() {
     return{
       voteList:[],
-      modalText:'',
-      txhash:'',
-      faileddes:'',
-      walletAccount:''
+      walletAccount:'',
     }
   },
   methods:{
@@ -51,6 +36,9 @@ export default {
       this.getAccountInfo()
       this.$refs['vote-modal'].show()
     },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
     unVote(item){
       this.$refs['vote-modal'].hide()
       const iost = IWalletJS.newIOST(IOST)
@@ -59,19 +47,15 @@ export default {
         
       })
       .on('success', (result) => {
-        this.modalText = '撤回投票成功'
-        this.txhash = result.tx_hash
-        this.$refs.statusModal.show()
-
+        console.log('result',result)
+        this.$emit('unVote',{status:'success',text:'取消投票成功'})
       })
       .on('failed', (failed) => {
         if (/rejected/i.test(failed)) {
           return
         }
-        this.modalText = '撤回投票失败'
-        this.faileddes = failed
-        this.$refs.statusModal.show()
-        
+        console.log('failed',failed)
+        this.$emit('unVote',{status:'failed',text:'取消投票失败',faileddes:failed})
       })
     }
   }

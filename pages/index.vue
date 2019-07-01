@@ -6,19 +6,19 @@
           <img class="icon-abct" src="~/assets/imgs/icon_abct.svg" width="75">
           <div class="banner-content-right">
             <div>
-              <b-link to="/">什么是ABCT ></b-link>
+              <span @click="ruleModal('abct')">什么是ABCT ></span>
             </div>
             <div class="mt-8">
               <!-- fixedNumber(price,6) -->
               <img class="switch" src="~/assets/imgs/icon_switch.svg" @click="priceChange" width="15">
               <no-ssr>
-                <span :class="['font-norwester', /ios|ipad|iphone/i.test(navigator.userAgent)?'fs-20':'fs-18', 'ml-1']" >1 ABCT = <div id="price"></div>{{`${changeType=='ratio'?' IOST':/cn/i.test(lang.lang)?' CNY':' USD'}`}}</span>
+                <span :class="[`font-norwester ml-1 ${font_size}`]" >1 ABCT = <div id="price"></div>{{`${changeType=='ratio'?' IOST':/cn/i.test(lang.lang)?' CNY':' USD'}`}}</span>
               </no-ssr>
             </div>
             <div class="mt-8">
               <!-- <span class="fs-14" to="/">当日涨幅：<DiffLabel slot="activator" :diff="priceInfo.percent_change_24h" :formatter="(text) => fixedNumber(text,2) + '%'" tag="sup" class="fz-12" /></span> -->
               <!-- <span class="ml-5">|</span> -->
-              <span class="ml-5 fs-14" to="/">涨幅：<DiffLabel slot="activator" :diff="changeType=='ratio'?priceInfo.percent_change_ratio:priceInfo.percent_change_price" :formatter="(text) => fixedNumber(text,2) + '%'" tag="sup" class="fz-12" /></span>
+              <span class="fs-14" to="/">涨幅：<DiffLabel slot="activator" :diff="changeType=='ratio'?priceInfo.percent_change_ratio:priceInfo.percent_change_price" :formatter="(text) => fixedNumber(text,2) + '%'" tag="sup" class="fz-12" /></span>
             </div>
           </div>
         </div>
@@ -45,15 +45,16 @@
       <div class="vote-btn mt-20" @click="toRoute('vote')">投票免费抢</div>
       <div class="tips-view mt-15">
         <span @click="historyModal('issue')">我的分红记录</span>
-        <span @click="ruleModal('publish')">发行规则？</span>
+        <span @click="ruleModal('issue')">发行规则？</span>
       </div>
     </div>
     <div class="exchange mt-20">
       <div class="exchange-tip">
         <div class="exchange-pool">
-          <span>兑换资金池：{{fixedNumber(contractBalance.balance,2)}}</span>
+          <span class="fb">兑换资金池：{{fixedNumber(contractBalance.balance,2)+ '\xa0 IOST'}}  </span>
+          <img class="icon_largerise" src="~/assets/imgs/icon_largerise2.svg">
         </div>
-        <div>我的ABCT：{{tokenbalance}}</div>
+        <div class="abct-text">我的ABCT：{{tokenbalance}}</div>
         <div class="mt-15 fb">
           <div>1 ABCT = {{ '\xa0'+fixedNumber(priceInfo.price_ratio,6)+'\xa0'}}IOST  = {{/cn/i.test(lang.lang)?(fixedNumber(priceInfo.price_cny,6) +'\xa0'+'CNY'):(fixedNumber(priceInfo.price_usd,6)+'\xa0'+'USD')}} </div>
         </div>
@@ -105,6 +106,7 @@ export default {
       startPrice:'',
       endPrice:'',
       priceTimePercent:0,
+      font_size:'fs-20',
       changeType:'ratio'
     }
   },
@@ -124,6 +126,9 @@ export default {
     //价格
     this.getPriceDown()
     this.getObtainHistory()
+    if (window.innerWidth < 400){
+      this.font_size = 'fs-18'
+    }
   },  
   methods:{
     //账户信息
@@ -308,9 +313,6 @@ export default {
       .banner-content {
         align-items: center;
         height: 100%;
-        .switch{
-          margin-left:5px;
-        }
         .banner-content-right{
           margin-left:12px;
           flex: 1;
@@ -359,8 +361,12 @@ export default {
       padding: 15px;
       background-color:#1F166B;
       .exchange-pool{
-        display: flex;
-        justify-content: space-between;
+        .icon_largerise{
+          height: 11px;
+        }
+      }
+      .abct-text{
+        line-height: 30px;
       }
     }
   }

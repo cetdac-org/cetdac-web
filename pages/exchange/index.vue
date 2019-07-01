@@ -10,7 +10,7 @@
     >
       {{alertText}}
     </b-alert>
-    <b-link to="/" style="color:#FF768A;">< 返回</b-link>
+    <b-link to="/" style="color:#FF768A;">{{backStr}}</b-link>
     <div class="mt-15 info-view">
       <img class="icon-img" src="@/assets/imgs/icon_abc.svg">
       <div class="ml-5 abct-balance">
@@ -38,7 +38,7 @@
       </div>
       <div class="exchange-btn mt-20" @click="exchange">兑换 IOST</div>
       <div class="mt-10 history-tip" @click="historyModal('exchange')">我的兑换记录</div>
-      <div class="mt-10 exchange-tip"><span @click="ruleModal('abct')">什么是ABCT</span> <span @click="ruleModal('publish')">发行规则</span> <span @click="ruleModal('exchange')">兑换规则</span></div>
+      <div class="mt-10 exchange-tip"><span @click="ruleModal('abct')">什么是ABCT</span> <span @click="ruleModal('issue')">发行规则</span> <span @click="ruleModal('exchange')">兑换规则</span></div>
     </div>
     <HistoryModal ref="historyModal" />
     <TipsModal ref="tipsModal" />
@@ -76,6 +76,8 @@ export default {
       tokenbalance:0,
       dismissSecs: 3,
       dismissCountDown: 0,
+
+      backStr:'< 返回',
 
       abctNumber:'-',
       iostNumber:'-',
@@ -258,9 +260,6 @@ export default {
     .scale-tip{
       padding: 10px;
       color: rgba(255, 255, 255, 0.6);
-    }
-    .switch{
-      margin-left:5px;
     }
   }
   .exchange-view{

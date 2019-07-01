@@ -10,13 +10,13 @@
     >
       {{alertText}}
     </b-alert>
-    <b-link to="/" style="color:#FF768A;">< 返回</b-link>
+    <b-link to="/" style="color:#FF768A;">{{backStr}}</b-link>
     <div class="mt-15 info-view">
       <div class="info-line" @click="voteNumber = fixedNumber(accountInfo.balance,6)">我的IOST：{{fixedNumber(accountInfo.balance,6)}}</div>
       <div class="info-line">投票中的IOST：{{votebalances}}</div>
       <div class="frozen-line">
         <span>冻结中的IOST：{{frozenbalances}}</span>
-        <b-link href="javascript:;" style="color:#FF768A;" @click="unvoteModal">马上赎回</b-link>
+        <b-link href="javascript;" style="color:#FF768A;" @click="unvoteModal">马上赎回</b-link>
       </div>
     </div>
     <div class="exchange-info mt-20">
@@ -90,8 +90,9 @@ export default {
       abctNumber:'-',
       iostNumber:'-',
       priceNumber:'-',
+      backStr:'< 返回',
 
-      dayABCT:86400,
+      dayABCT:864000,
 
       startPrice:'',
       endPrice:'',

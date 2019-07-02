@@ -19,6 +19,12 @@ module.exports = {
         href:
           'https://cdn.bootcss.com/animate.css/3.7.2/animate.min.css'
       },
+      {
+        rel: 'stylesheet',
+        type: 'text/css',
+        href:
+          '/loading.css'
+      },
     ]
   },
   /*

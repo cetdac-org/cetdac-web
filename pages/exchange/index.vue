@@ -12,7 +12,7 @@
         {{faileddes.message||faileddes}}
       </div>
     </b-alert>
-    <b-link to="/" style="color:#FF768A;">{{backStr}}</b-link>
+    <!-- <b-link to="/" style="color:#FF768A;">{{backStr}}</b-link> -->
     <div class="mt-15 info-view">
       <img class="icon-img" src="@/assets/imgs/icon_abc.svg">
       <div class="ml-5 abct-balance">
@@ -44,6 +44,18 @@
     </div>
     <HistoryModal ref="historyModal" />
     <TipsModal ref="tipsModal" />
+    <b-modal  ref="statusModal" >
+      <div style="color:#000;">{{modalText}}</div>
+      <div style="color:#721c24">{{txMessage}}</div>
+      <template slot="modal-footer" slot-scope="{cancel}">
+        <b-button v-if="txhash != ''" size="sm" variant="info" @click="toTxHash">
+          查看交易结果
+        </b-button>
+        <b-button size="sm" @click="cancel()">
+          Cancel
+        </b-button>
+      </template>
+    </b-modal>
   </div>
 </template>
 <script>
@@ -69,7 +81,7 @@ export default {
       contractBalance:{},
       accountInfo:{},
       tokenbalance:0,
-      
+
       dismissSecs: 3,
       dismissCountDown: 0,
 
@@ -82,6 +94,11 @@ export default {
       variant:'danger',
       alertText:'',
       faileddes:'',
+      isshowModal:false,//避免弹框两次
+      modalText:'',
+      txMessage:'',
+      txhash:'',
+
     }
   },
   head() {
@@ -134,27 +151,54 @@ export default {
         return
       }
       const iost = IWalletJS.newIOST(IOST)
+      this.isshowModal = false
+      this.modalText = '兑换已完成'
+      this.txMessage = ''
       const ctx = iost.callABI('ContractGBxLy1B1jfGoAWUHGDW9k8hG7NRo4owwcerJmrNTK8xZ', "exchange", [this.walletAccount, this.exchangeNumber,''])
       ctx.gasLimit = 1000000
       iost.signAndSend(ctx).on('pending', (trx) => {
-        
+        if (!this.isshowModal) {
+          this.isshowModal = true
+          this.txhash = trx
+          this.$refs.statusModal.show()
+        }
       })
       .on('success', (result) => {
-        this.variant = 'success'
-        this.alertText = '兑换成功'
-        this.exchangeNumber = ''
-        this.getTokenBalance()
-        this.dismissCountDown = this.dismissSecs
+        // alert('2222')
+        // this.variant = 'success'
+        // this.alertText = '兑换成功'
+        // this.exchangeNumber = ''
+        // this.getTokenBalance()
+        // this.dismissCountDown = this.dismissSecs
+        if (!this.isshowModal) {
+          this.isshowModal = true
+          this.txhash = result.tx_hash
+          this.$refs.statusModal.show()
+        }
       })
       .on('failed', (failed) => {
+        // alert('33333')
         if (/rejected/i.test(failed)) {
           return
         }
-        this.variant = 'danger'
-        this.alertText = '兑换失败'
-        this.faileddes = failed
-        this.dismissCountDown = this.dismissSecs
+        if (!this.isshowModal) {
+          this.isshowModal = true
+          this.modalText = '兑换失败'
+          this.txhash = failed.tx_hash ? failed.tx_hash:''
+          this.txMessage = JSON.stringify(failed)
+          this.$refs.statusModal.show()
+        }
+        // this.variant = 'danger'
+        // this.alertText = '兑换失败'
+        // this.faileddes = failed
+        // this.dismissCountDown = this.dismissSecs
+
       })
+    },
+    toTxHash(){
+      if (this.txhash) {
+        window.location = `https://www.iostabc.com/tx/${this.txhash}`
+      }
     },
     inputChange(){
       this.priceNumber = this.fixedNumber(/cn/i.test(this.lang.lang)? this.exchangeNumber * this.priceInfo.price_cny : this.exchangeNumber * this.priceInfo.price_usd, 6)

@@ -12,7 +12,7 @@
         {{faileddes.message||faileddes}}
       </div>
     </b-alert>
-    <b-link to="/" style="color:#FF768A;">{{backStr}}</b-link>
+    <!-- <b-link to="/" style="color:#FF768A;">{{backStr}}</b-link> -->
     <div class="mt-15 info-view">
       <div class="info-line" @click="voteNumber = fixedNumber(accountInfo.balance,6)">我的IOST：{{fixedNumber(accountInfo.balance,6)}}</div>
       <div class="info-line">投票中的IOST：{{votebalances}}</div>
@@ -46,11 +46,26 @@
       </div>
       <div class="vote-btn mt-20" @click="vote">马上投票抢 ABCT</div>
       <div class="mt-10 history-tip" @click="historyModal('issue')">我的ABCT分红记录</div>
-      <div class="mt-10 exchange-tip"><span @click="ruleModal('abct')">什么是ABCT</span> <span @click="ruleModal('publish')">发行规则</span> <span @click="ruleModal('exchange')">兑换规则</span></div>
+      <div class="mt-10 exchange-tip"><span @click="ruleModal('abct')">什么是ABCT</span> <span @click="ruleModal('issue')">发行规则</span> <span @click="ruleModal('exchange')">兑换规则</span></div>
     </div>
     <HistoryModal ref="historyModal" />
     <TipsModal ref="tipsModal" />
     <UnVoteModal ref="unvoteModal" @unVote="unvoteTip" />
+    <div class="mask-view" v-show="isloading">
+      <div class=" ld ld-spinner ld-spin-fast" style="font-size:64px;color:#8da"></div>
+    </div>
+    <b-modal ref="statusModal" >
+      <div style="color:#000;">{{modalText}}</div>
+      <div style="color:#721c24">{{txMessage}}</div>
+      <template slot="modal-footer" slot-scope="{cancel}">
+        <b-button v-if="txhash != ''" size="sm" variant="info" @click="toTxHash">
+          查看交易结果
+        </b-button>
+        <b-button size="sm" @click="cancel()">
+          Cancel
+        </b-button>
+      </template>
+    </b-modal>
   </div>
 </template>
 <script>
@@ -97,6 +112,12 @@ export default {
       dismissCountDown: 0,
       variant:'danger',
       faileddes:'',
+
+      isloading:false,
+      isshowModal:false,//避免弹框两次
+      modalText:'',
+      txMessage:'',
+      txhash:'',
     }
   },
   head() {
@@ -129,9 +150,9 @@ export default {
       })
     },
     vote(){
-      if (this.voteNumber < 1) {
+      if (this.voteNumber < 0) {
         this.variant = 'danger'
-        this.alertText = '投票数量不能小于1'
+        this.alertText = '投票数量不能小于0'
         this.dismissCountDown = this.dismissSecs
         return
       } 
@@ -141,37 +162,64 @@ export default {
         this.dismissCountDown = this.dismissSecs
         return
       }
+      this.isshowModal = false
+      this.modalText = '投票已完成'
+      this.txMessage = ''
+
       const iost = IWalletJS.newIOST(IOST)
       const ctx = iost.callABI('vote_producer.iost', "vote", [this.walletAccount, 'iostabc', this.voteNumber.toString()])
       ctx.gasLimit = 1000000
       iost.signAndSend(ctx).on('pending', (trx) => {
-        
+        if (!this.isshowModal) {
+          this.isshowModal = true
+          this.txhash = trx
+          this.$refs.statusModal.show()
+        }
+        // this.isloading = true
       })
       .on('success', (result) => {
-        this.variant = 'success'
-        this.alertText = '投票成功'
-        this.voteNumber = ''
-        this.getAccountInfo()
-        this.dismissCountDown = this.dismissSecs
-
+        // this.isloading = false
+        // this.variant = 'success'
+        // this.alertText = '投票成功'
+        // this.voteNumber = ''
+        // this.getAccountInfo()
+        // this.dismissCountDown = this.dismissSecs
+        if (!this.isshowModal) {
+          this.isshowModal = true
+          this.txhash = result.tx_hash
+          this.$refs.statusModal.show()
+        }
       })
       .on('failed', (failed) => {
+        // this.isloading = false
         if (/rejected/i.test(failed)) {
           return
         }
-        this.variant = 'danger'
-        this.alertText = '投票失败'
-        this.faileddes = failed
-        this.dismissCountDown = this.dismissSecs
+        if (!this.isshowModal) {
+          this.isshowModal = true
+          this.modalText = '投票失败'
+          this.txhash = failed.tx_hash?failed.tx_hash:''
+          this.txMessage = JSON.stringify(failed)
+          this.$refs.statusModal.show()
+        }
+        // this.variant = 'danger'
+        // this.alertText = '投票失败'
+        // this.faileddes = failed
+        // this.dismissCountDown = this.dismissSecs
       })
     },
-    unvoteTip(data){
-      this.variant = data.status == 'success' ?'success':'danger'
-      this.alertText = data.text
-      if (data.faileddes) {
-        this.faileddes = data.faileddes
+    toTxHash(){
+      if (this.txhash) {
+        window.location = `https://www.iostabc.com/tx/${this.txhash}`
       }
-      this.dismissCountDown = this.dismissSecs
+    },
+    unvoteTip(data){
+      if (data.message) {
+        this.txMessage = data.message
+      }
+      this.modalText = data.text
+      this.txhash = data.txhash
+      this.$refs.statusModal.show()
     },
     inputChange(){
       this.abctNumber = ((this.voteNumber || 0)/parseInt(this.producerVotes)) * this.dayABCT
@@ -327,8 +375,16 @@ export default {
       justify-content: space-between;
     }
   }
-  .statusmodal{
-    padding: 20px;
+  .mask-view{
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 

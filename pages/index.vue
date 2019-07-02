@@ -1,18 +1,5 @@
 <template>
   <div class="abct-web-index">
-    <b-alert
-      :variant="variant"
-      fade
-      :show="dismissCountDown"
-      @dismissed="dismissCountDown=0"
-      @dismiss-count-down="countDownChanged"
-    >
-      <div>{{alertText}}</div>
-      <div class="mt-2" v-if="faileddes != ''">
-        {{faileddes.message||faileddes}}
-      </div>
-    </b-alert>
-
     <div class="banner-bg">
       <div class="banner">
         <div class="banner-content d-flex">
@@ -63,7 +50,7 @@
     </div>
     <div class="exchange mt-20">
       <div class="exchange-tip">
-        <div class="abct-text fb  ">我的ABCT：{{tokenbalance}}</div>
+        <div class="abct-text fb">我的ABCT：{{tokenbalance}}</div>
         <div class="fb">
           <div>1 ABCT = {{ '\xa0'+fixedNumber(priceInfo.price_ratio,6)+'\xa0'}}IOST  = {{/cn/i.test(lang.lang)?(fixedNumber(priceInfo.price_cny,6) +'\xa0'+'CNY'):(fixedNumber(priceInfo.price_usd,6)+'\xa0'+'USD')}} </div>
         </div>
@@ -81,6 +68,20 @@
     <HistoryModal ref="historyModal" />
     <TipsModal ref="tipsModal" />
     <UnVoteModal ref="unvoteModal" @unVote="unvoteTip" />
+    <div class="mask-view" v-show="isloading">
+      <div class=" ld ld-spinner ld-spin-fast" style="font-size:64px;color:#8da"></div>
+    </div>
+    <b-modal ref="statusModal">
+      <div style="color:#000;">{{modalText}}</div>
+      <template slot="modal-footer" slot-scope="{cancel}">
+        <b-button v-if="txhash != ''" size="sm" variant="info" @click="toTxHash">
+          查看交易结果
+        </b-button>
+        <b-button size="sm" @click="cancel()">
+          Cancel
+        </b-button>
+      </template>
+    </b-modal>
   </div>
 </template>
 <script>
@@ -121,11 +122,9 @@ export default {
       priceTimePercent:0,
       font_size:'fs-20',
       changeType:'ratio',
-      dismissSecs: 3,
-      dismissCountDown: 0,
-      variant:'danger',
-      alertText:'',
-      faileddes:'',
+      isloading: false,
+      txhash:'',
+      modalText:''
     }
   },
   head() {
@@ -144,8 +143,14 @@ export default {
     //价格
     this.getPriceDown()
     this.getObtainHistory()
-    if (window.innerWidth < 400){
-      this.font_size = 'fs-18'
+    if (/ios|ipad|iphone/i.test(navigator.userAgent)) {
+      if (window.innerWidth < 400){
+        this.font_size = 'fs-18'
+      }
+    } else {
+      if (window.innerWidth < 400) {
+        this.font_size = 'fs-17'
+      }
     }
   },  
   methods:{
@@ -156,6 +161,11 @@ export default {
         this.votebalances= account.vote_infos.reduce((reduced, vote) => vote.votes ? reduced + vote.votes : 0, 0)
         this.frozenbalances =  account.frozen_balances.reduce((reduced,frozen) => frozen.amount ? reduced+frozen.amount:0,0)
       })
+    },
+    toTxHash(){
+      if (this.txhash) {
+        window.location = `https://www.iostabc.com/tx/${this.txhash}`
+      }
     },
     getPrice(){
       this.$common.getPrice().then( res =>{
@@ -177,15 +187,12 @@ export default {
       })
     },
     unvoteTip(data){
-      this.variant = data.status == 'success' ?'success':'danger'
-      this.alertText = data.text
-      if (data.faileddes) {
-        this.faileddes = data.faileddes
+      if (data.message) {
+        this.txMessage = data.message
       }
-      this.dismissCountDown = this.dismissSecs
-    },
-    countDownChanged(dismissCountDown) {
-      this.dismissCountDown = dismissCountDown
+      this.modalText = data.text
+      this.txhash = data.txhash
+      this.$refs.statusModal.show()
     },
     getPriceDown(){
       this.getPrice()
@@ -324,7 +331,7 @@ export default {
     background-size: cover;
     height: 157px;
     border-radius: 8px;
-    box-shadow: #111 1px 1px 0;
+    // box-shadow: #111 1px 1px 0;
     .banner{
       a{
         color:white;
@@ -332,7 +339,6 @@ export default {
       }
       padding: 6px;
       height: 151px;
-      border: 1px solid rgb(37, 27, 133);
       border-radius: 8px;
       background: transparent;
       .icon-abct{
@@ -400,6 +406,17 @@ export default {
         line-height: 30px;
       }
     }
+  }
+  .mask-view{
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 </style>

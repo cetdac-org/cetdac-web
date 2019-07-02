@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal centered ref="vote-modal" hide-footer class="modal">
+    <b-modal  ref="vote-modal" hide-footer class="modal">
       <div class="nodata-view" v-if="voteList.length<1">
         暂无数据
       </div>
@@ -23,6 +23,7 @@ export default {
     return{
       voteList:[],
       walletAccount:'',
+      isshowModal:false,//避免弹框两次
     }
   },
   methods:{
@@ -41,21 +42,29 @@ export default {
     },
     unVote(item){
       this.$refs['vote-modal'].hide()
+      this.isshowModal = false
       const iost = IWalletJS.newIOST(IOST)
       const ctx = iost.callABI('vote_producer.iost', "unvote", [this.walletAccount, item.option, item.votes.toString()])
       iost.signAndSend(ctx).on('pending', (trx) => {
-        
+        if (!this.isshowModal) {
+          this.isshowModal = true
+          this.$emit('unVote',{status:'pending',text:'取消投票完成',txhash:trx})
+        }
       })
       .on('success', (result) => {
-        console.log('result',result)
-        this.$emit('unVote',{status:'success',text:'取消投票成功'})
+        if (!this.isshowModal) {
+          this.isshowModal = true
+          this.$emit('unVote',{status:'success',text:'取消投票完成',txhash:result.tx_hash})
+        }
       })
       .on('failed', (failed) => {
         if (/rejected/i.test(failed)) {
           return
         }
-        console.log('failed',failed)
-        this.$emit('unVote',{status:'failed',text:'取消投票失败',faileddes:failed})
+        if (!this.isshowModal) {
+          this.isshowModal = true
+          this.$emit('unVote',{status:'failed',text:'取消投票失败',txhash:failed.tx_hash?failed.tx_hash:'',message:JSON.stringify(failed)})
+        }
       })
     }
   }

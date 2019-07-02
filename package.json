@@ -8,6 +8,8 @@
     "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
     "build": "nuxt build",
     "start": "cross-env NODE_ENV=production node server/index.js",
+    "pm2": "pm2 startOrRestart ecosystem.json --env production",
+    "pm2-pre": "pm2 startOrRestart ecosystem.json --env pre",
     "generate": "nuxt generate"
   },
   "dependencies": {

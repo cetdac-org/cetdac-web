@@ -1,0 +1,29 @@
+{
+  "apps" : [
+    {
+      "name"      : "abct-web",
+      "script"    : "server/index.js",
+      "instances" : 0,
+      "instance_var": "ABCT-WEB",
+      "exec_mode" : "cluster",
+      "watch"     : false,
+      "ignore_watch": [
+        "logs",
+        ".nuxt"
+      ],
+      "error_file": "logs/abct.web.stderr.log",
+      "out_file"  : "logs/abct.web.stdout.log",
+      "mergeLogs" : false,
+      "env": {
+        "NODE_ENV": "dev"
+      },
+      "env_production" : {
+        "NODE_ENV": "production"
+      },
+      "env_pre" : {
+        "NODE_ENV": "production",
+        "SERVER_ENV": "pre"
+      }
+    }
+  ]
+}

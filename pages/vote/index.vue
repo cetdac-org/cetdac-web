@@ -174,6 +174,7 @@ export default {
         if (!this.isshowModal) {
           this.isshowModal = true
           this.txhash = trx
+          this.voteNumber = ''
           this.$refs.statusModal.show()
         }
         // this.isloading = true
@@ -188,6 +189,7 @@ export default {
         if (!this.isshowModal) {
           this.isshowModal = true
           this.txhash = result.tx_hash
+          this.voteNumber = ''
           this.$refs.statusModal.show()
         }
       })

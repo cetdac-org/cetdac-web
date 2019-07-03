@@ -162,6 +162,7 @@ export default {
         if (!this.isshowModal) {
           this.isshowModal = true
           this.txhash = trx
+          this.exchangeNumber = ''
           this.$refs.statusModal.show()
         }
       })
@@ -174,6 +175,7 @@ export default {
         // this.dismissCountDown = this.dismissSecs
         if (!this.isshowModal) {
           this.isshowModal = true
+          this.exchangeNumber = ''
           this.txhash = result.tx_hash
           this.$refs.statusModal.show()
         }

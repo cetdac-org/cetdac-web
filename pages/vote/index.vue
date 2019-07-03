@@ -226,7 +226,7 @@ export default {
       this.abctNumber = ((this.voteNumber || 0)/parseInt(this.producerVotes)) * this.dayABCT
       this.iostNumber = this.abctNumber * this.priceInfo.price_ratio 
       this.priceNumber = /cn/i.test(this.lang.lang)? this.abctNumber * this.priceInfo.price_cny : this.abctNumber * this.priceInfo.price_usd
-      if (this.priceNumber < 0.000001) {
+      if (this.priceNumber < 0.000001 && this.priceNumber != 0) {
         this.priceNumber = 0.000001
       }
     },

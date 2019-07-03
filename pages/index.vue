@@ -32,7 +32,7 @@
     <div class="vote mt-15">
       <div class="vote-content d-flex">
         <div class="w100p">
-          <div>我的IOST：{{fixedNumber(accountInfo.balance,4)}}</div>
+          <div>我的IOST：{{accountInfo.balance}}</div>
           <div class="on-voting d-flex mt-2">
             <span>投票中的IOST：{{votebalances}}</span>
           </div>
@@ -59,6 +59,7 @@
           <img class="icon_largerise" src="~/assets/imgs/icon_largerise2.svg">
         </div>
       </div>
+      <div class="tips-view mt-15" @click="historyModal('recharge')">资金池充值记录</div>
       <div class="exchange-btn mt-20" @click="toRoute('exchange')" >兑换IOST</div>
       <div class="tips-view mt-15">
         <span @click="historyModal('exchange')">我的兑换记录</span>

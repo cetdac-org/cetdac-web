@@ -47,5 +47,13 @@ export default function API(axios) {
         }
       })
     },
+    getRechargeHistory ({ page = 1, size = 20 } = {}) {
+      return axios.get(`${apiUrl}/abct/historytopupabct`,{
+        params: {
+          page,
+          size,
+        }
+      })
+    },
   }
 }

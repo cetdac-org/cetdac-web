@@ -156,7 +156,7 @@ export default {
       // this.modalText = '兑换已完成'
       this.modalText = `兑换完成，${exchangeNumber + '\xa0'}ABCT 兑换为 ${this.fixedNumber(exchangeNumber * this.price, 6) +'\xa0'}IOST`
       this.txMessage = ''
-      const ctx = iost.callABI('ContractGBxLy1B1jfGoAWUHGDW9k8hG7NRo4owwcerJmrNTK8xZ', "exchange", [this.walletAccount, exchangeNumber,''])
+      const ctx = iost.callABI('ContractGBxLy1B1jfGoAWUHGDW9k8hG7NRo4owwcerJmrNTK8xZ', "exchange", [this.walletAccount, exchangeNumber.toString(),''])
       ctx.gasLimit = 1000000
       iost.signAndSend(ctx).on('pending', (trx) => {
         if (!this.isshowModal) {

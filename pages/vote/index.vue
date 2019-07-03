@@ -14,7 +14,7 @@
     </b-alert>
     <!-- <b-link to="/" style="color:#FF768A;">{{backStr}}</b-link> -->
     <div class="mt-15 info-view">
-      <div class="info-line" @click="voteNumber = fixedNumber(accountInfo.balance,6)">我的IOST：{{fixedNumber(accountInfo.balance,6)}}</div>
+      <div class="info-line" @click="voteNumber = accountInfo.balance">我的IOST：{{accountInfo.balance}}</div>
       <div class="info-line">投票中的IOST：{{votebalances}}</div>
       <div class="frozen-line">
         <span>冻结中的IOST：{{frozenbalances}}</span>
@@ -29,7 +29,7 @@
       <b-input-group>
         <b-form-input v-model="voteNumber" placeholder="" @update="inputChange"></b-form-input>
         <b-input-group-append>
-          <div class="all-btn" @click="voteNumber = fixedNumber(accountInfo.balance,6);inputChange()">全部</div>
+          <div class="all-btn" @click="voteNumber = accountInfo.balance;inputChange()">全部</div>
         </b-input-group-append>
       </b-input-group>
       <div style="padding:10px">
@@ -165,10 +165,10 @@ export default {
       }
       this.isshowModal = false
       // this.modalText = '投票已完成'
-      this.modalText = `投票已完成，投给iostabc ${voteNumber}票，按当前节点总票数，每天会分得${'\xa0'+ this.fixedNumber(this.abctNumber,6)+'\xa0'} abct`
+      this.modalText = `投票已完成，投给iostabc ${'\xa0'+voteNumber+'\xa0'}票，按当前节点总票数，每天会分得${'\xa0'+ this.fixedNumber(this.abctNumber,6)+'\xa0'} abct`
       this.txMessage = ''
       const iost = IWalletJS.newIOST(IOST)
-      const ctx = iost.callABI('vote_producer.iost', "vote", [this.walletAccount, 'iostabc',voteNumber.toString()])
+      const ctx = iost.callABI('vote_producer.iost', "vote", [this.walletAccount, 'iostabc',voteNumber == this.accountInfo.balance?((voteNumber *10000 - 1)/10000).toString():voteNumber.toString()])
       ctx.gasLimit = 1000000
       iost.signAndSend(ctx).on('pending', (trx) => {
         if (!this.isshowModal) {

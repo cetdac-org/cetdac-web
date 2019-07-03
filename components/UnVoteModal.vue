@@ -48,13 +48,13 @@ export default {
       iost.signAndSend(ctx).on('pending', (trx) => {
         if (!this.isshowModal) {
           this.isshowModal = true
-          this.$emit('unVote',{status:'pending',text:'取消投票完成',txhash:trx})
+          this.$emit('unVote',{status:'pending',text:`撤回投票完成,撤回投给${'\xa0'+item.option+'\xa0' + item.votes+'\xa0'}票`,txhash:trx})
         }
       })
       .on('success', (result) => {
         if (!this.isshowModal) {
           this.isshowModal = true
-          this.$emit('unVote',{status:'success',text:'取消投票完成',txhash:result.tx_hash})
+          this.$emit('unVote',{status:'success',text:`撤回投票完成,撤回投给${'\xa0'+item.option+'\xa0' + item.votes+'\xa0'}票`,txhash:result.tx_hash})
         }
       })
       .on('failed', (failed) => {

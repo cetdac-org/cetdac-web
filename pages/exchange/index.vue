@@ -138,13 +138,14 @@ export default {
       },1000*610)
     },
     exchange(){
-      if (this.exchangeNumber < 1) {
+      let exchangeNumber = this.exchangeNumber || 0
+      if (exchangeNumber <= 0) {
         this.variant = 'danger'
-        this.alertText = '兑换数量不能小于1'
+        this.alertText = '兑换数量不能小于0'
         this.dismissCountDown = this.dismissSecs
         return
       } 
-      if (this.exchangeNumber > this.tokenbalance) {
+      if (exchangeNumber > this.tokenbalance) {
         this.variant = 'danger'
         this.alertText = '兑换数量超过可使用余额'
         this.dismissCountDown = this.dismissSecs
@@ -152,9 +153,10 @@ export default {
       }
       const iost = IWalletJS.newIOST(IOST)
       this.isshowModal = false
-      this.modalText = '兑换已完成'
+      // this.modalText = '兑换已完成'
+      this.modalText = `兑换完成，${exchangeNumber + '\xa0'}ABCT 兑换为 ${this.fixedNumber(exchangeNumber * this.price, 6) +'\xa0'}IOST`
       this.txMessage = ''
-      const ctx = iost.callABI('ContractGBxLy1B1jfGoAWUHGDW9k8hG7NRo4owwcerJmrNTK8xZ', "exchange", [this.walletAccount, this.exchangeNumber,''])
+      const ctx = iost.callABI('ContractGBxLy1B1jfGoAWUHGDW9k8hG7NRo4owwcerJmrNTK8xZ', "exchange", [this.walletAccount, exchangeNumber,''])
       ctx.gasLimit = 1000000
       iost.signAndSend(ctx).on('pending', (trx) => {
         if (!this.isshowModal) {
@@ -177,7 +179,6 @@ export default {
         }
       })
       .on('failed', (failed) => {
-        // alert('33333')
         if (/rejected/i.test(failed)) {
           return
         }

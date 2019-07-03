@@ -91,7 +91,7 @@ export default {
       price:0,
       priceInfo:{},
       contractBalance:{},
-      accountInfo:{},
+      accountInfo:{balance:0},
       tokenbalance:0,
       frozenbalances:0,
       votebalances:0,
@@ -150,24 +150,25 @@ export default {
       })
     },
     vote(){
-      if (this.voteNumber < 0) {
+      let voteNumber = this.voteNumber || 0
+      if (voteNumber <= 0) {
         this.variant = 'danger'
         this.alertText = '投票数量不能小于0'
         this.dismissCountDown = this.dismissSecs
         return
       } 
-      if (this.voteNumber > this.accountInfo.balance) {
+      if (voteNumber > this.accountInfo.balance) {
         this.variant = 'danger'
         this.alertText = '投票数量超过可使用余额'
         this.dismissCountDown = this.dismissSecs
         return
       }
       this.isshowModal = false
-      this.modalText = '投票已完成'
+      // this.modalText = '投票已完成'
+      this.modalText = `投票已完成，投给iostabc ${voteNumber}票，按当前节点总票数，每天会分得${'\xa0'+ this.fixedNumber(this.abctNumber,6)+'\xa0'} abct`
       this.txMessage = ''
-
       const iost = IWalletJS.newIOST(IOST)
-      const ctx = iost.callABI('vote_producer.iost', "vote", [this.walletAccount, 'iostabc', this.voteNumber.toString()])
+      const ctx = iost.callABI('vote_producer.iost', "vote", [this.walletAccount, 'iostabc',voteNumber.toString()])
       ctx.gasLimit = 1000000
       iost.signAndSend(ctx).on('pending', (trx) => {
         if (!this.isshowModal) {

@@ -25,9 +25,9 @@
       </div>
       <div class="scale-desc">你可以在任何时间选择把 ABCT 兑换为IOST我们只收取0.5%的手续费</div>
       <b-input-group>
-        <b-form-input focus v-model="exchangeNumber" placeholder="" @update="inputChange"></b-form-input>
+        <b-form-input focus v-model="exchangeNumber" placeholder="请输入兑换数量" autocomplete="off" @update="inputChange"></b-form-input>
         <b-input-group-append>
-          <div class="all-btn" @click="exchangeNumber = tokenbalance;inputChange()">全部</div>
+          <div class="all-btn" @click="exchangeNumber = tokenbalance;inputChange()" >全部</div>
         </b-input-group-append>
       </b-input-group>
       <div class="scale-tip">{{exchangeNumber || 0}} ABCT = {{fixedNumber(exchangeNumber * price, 6)}} IOST = {{ priceNumber + (/cn/i.test(lang.lang)?" CNY":" USD") }}</div>

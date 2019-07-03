@@ -27,7 +27,7 @@
       </div>
       <div class="scale-desc">投票给 IOSTABC 节点即可免费获得 ABCT</div>
       <b-input-group>
-        <b-form-input v-model="voteNumber" placeholder="" @update="inputChange"></b-form-input>
+        <b-form-input v-model="voteNumber" placeholder="请输入投票数量" @update="inputChange" autocomplete="off"></b-form-input>
         <b-input-group-append>
           <div class="all-btn" @click="voteNumber = accountInfo.balance;inputChange()">全部</div>
         </b-input-group-append>

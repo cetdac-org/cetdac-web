@@ -32,7 +32,7 @@
     <div class="vote mt-15">
       <div class="vote-content d-flex">
         <div class="w100p">
-          <div>我的IOST：{{accountInfo.balance}}</div>
+          <div>我的IOST：{{fixedNumber(accountInfo.balance,6)}}</div>
           <div class="on-voting d-flex mt-2">
             <span>投票中的IOST：{{votebalances}}</span>
           </div>
@@ -297,7 +297,9 @@ export default {
         }
       }, 1000);
     },
-    fixedNumber(number,fixed){
+    fixedNumber(numbers,fixed){
+      let number = new Number(numbers)
+      number = number.toFixed(10)
       if (!number) {
         return 0
       }

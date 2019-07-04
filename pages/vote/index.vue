@@ -27,7 +27,7 @@
       </div>
       <div class="scale-desc">投票给 IOSTABC 节点即可免费获得 ABCT</div>
       <b-input-group>
-        <b-form-input v-model="voteNumber" placeholder="请输入投票数量" @update="inputChange" autocomplete="off"></b-form-input>
+        <b-form-input type="number" v-model="voteNumber" placeholder="请输入投票数量" @update="inputChange" autocomplete="off"></b-form-input>
         <b-input-group-append>
           <div class="all-btn" @click="voteNumber = accountInfo.balance;inputChange()">全部</div>
         </b-input-group-append>
@@ -164,11 +164,10 @@ export default {
         return
       }
       this.isshowModal = false
-      // this.modalText = '投票已完成'
       this.modalText = `投票已完成，投给iostabc ${'\xa0'+voteNumber+'\xa0'}票，按当前节点总票数，每天会分得${'\xa0'+ this.fixedNumber(this.abctNumber,6)+'\xa0'} abct`
       this.txMessage = ''
       const iost = IWalletJS.newIOST(IOST)
-      const ctx = iost.callABI('vote_producer.iost', "vote", [this.walletAccount, 'iostabc',voteNumber == this.accountInfo.balance?((voteNumber *10000 - 1)/10000).toString():voteNumber.toString()])
+      const ctx = iost.callABI('vote_producer.iost', "vote", [this.walletAccount, 'iostabc',voteNumber.toString()])
       ctx.gasLimit = 1000000
       iost.signAndSend(ctx).on('pending', (trx) => {
         if (!this.isshowModal) {
@@ -278,7 +277,9 @@ export default {
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown
     },
-    fixedNumber(number,fixed){
+    fixedNumber(numbers,fixed){
+      let number = new Number(numbers)
+      number = number.toFixed(10)
       if (!number) {
         return 0
       }

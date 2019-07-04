@@ -25,7 +25,7 @@
       </div>
       <div class="scale-desc">你可以在任何时间选择把 ABCT 兑换为IOST我们只收取0.5%的手续费</div>
       <b-input-group>
-        <b-form-input focus v-model="exchangeNumber" placeholder="请输入兑换数量" autocomplete="off" @update="inputChange"></b-form-input>
+        <b-form-input focus type="number" v-model="exchangeNumber" placeholder="请输入兑换数量" autocomplete="off" @update="inputChange"></b-form-input>
         <b-input-group-append>
           <div class="all-btn" @click="exchangeNumber = tokenbalance;inputChange()" >全部</div>
         </b-input-group-append>
@@ -239,7 +239,9 @@ export default {
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown
     },
-    fixedNumber(number,fixed){
+    fixedNumber(numbers,fixed){
+      let number = new Number(numbers)
+      number = number.toFixed(10)
       if (!number) {
         return 0
       }

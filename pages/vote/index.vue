@@ -14,7 +14,7 @@
     </b-alert>
     <!-- <b-link to="/" style="color:#FF768A;">{{backStr}}</b-link> -->
     <div class="mt-15 info-view">
-      <div class="info-line" @click="voteNumber = accountInfo.balance">我的IOST：{{accountInfo.balance}}</div>
+      <div class="info-line" @click="voteNumber = fixedNumber(accountInfo.balance,6)">我的IOST：{{fixedNumber(accountInfo.balance,6)}}</div>
       <div class="info-line">投票中的IOST：{{votebalances}}</div>
       <div class="frozen-line">
         <span>冻结中的IOST：{{frozenbalances}}</span>
@@ -29,7 +29,7 @@
       <b-input-group>
         <b-form-input type="number" v-model="voteNumber" placeholder="请输入投票数量" @update="inputChange" autocomplete="off"></b-form-input>
         <b-input-group-append>
-          <div class="all-btn" @click="voteNumber = accountInfo.balance;inputChange()">全部</div>
+          <div class="all-btn" @click="voteNumber = fixedNumber(accountInfo.balance,6);inputChange()">全部</div>
         </b-input-group-append>
       </b-input-group>
       <div style="padding:10px">

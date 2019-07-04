@@ -1,16 +1,20 @@
 export default function API(axios) {
   axios.defaults.baseURL = 'https://www.iostabc.com/endpoint'
 
-  const apiUrl = 'https://www.iostabc.com/api/abctest'
+  const apiUrl = 'https://www.iostabc.com/api/abct'
+  // const apiUrl = 'https://www.iostabc.com/api/abctest'
   const iosturl = 'https://www.iostabc.com/api'
   
+  // const contract = ContractGBxLy1B1jfGoAWUHGDW9k8hG7NRo4owwcerJmrNTK8xZ
+  const contract = 'ContractAi3wmFKBRVqfpMvZ2iUL2DtrvaMPXA4JZJypWvW6WaqM'
+
   axios.interceptors.response.use(function (res) {
     return res.data ? res.data : Promise.reject(res)
   }, function (err) {
     return Promise.reject(err)
   })
   return {
-    getContractBalcnce (contract='ContractGBxLy1B1jfGoAWUHGDW9k8hG7NRo4owwcerJmrNTK8xZ') {
+    getContractBalcnce () {
       return axios.get(`/getTokenBalance/${contract}/iost/1`)
     },
     getTokenBalcnce (id) {

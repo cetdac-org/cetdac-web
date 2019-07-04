@@ -5,7 +5,7 @@ export default function API(axios) {
   // const apiUrl = 'https://www.iostabc.com/api/abctest'
   const iosturl = 'https://www.iostabc.com/api'
   
-  // const contract = ContractGBxLy1B1jfGoAWUHGDW9k8hG7NRo4owwcerJmrNTK8xZ
+  // const contract = 'ContractGBxLy1B1jfGoAWUHGDW9k8hG7NRo4owwcerJmrNTK8xZ'
   const contract = 'ContractAi3wmFKBRVqfpMvZ2iUL2DtrvaMPXA4JZJypWvW6WaqM'
 
   axios.interceptors.response.use(function (res) {
@@ -18,7 +18,7 @@ export default function API(axios) {
       return axios.get(`/getTokenBalance/${contract}/iost/1`)
     },
     getTokenBalcnce (id) {
-      return axios.get(`/getTokenBalance/${id}/abctest/1`)
+      return axios.get(`/getTokenBalance/${id}/abct/1`)
     },
     getProducerInfo (producer) {
       return axios.get(`${iosturl}/producer/${producer}`)

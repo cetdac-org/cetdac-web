@@ -18,7 +18,7 @@
             <div class="mt-8">
               <!-- <span class="fs-14" to="/">当日涨幅：<DiffLabel slot="activator" :diff="priceInfo.percent_change_24h" :formatter="(text) => fixedNumber(text,2) + '%'" tag="sup" class="fz-12" /></span> -->
               <!-- <span class="ml-5">|</span> -->
-              <span class="fs-14" to="/">涨幅：<DiffLabel slot="activator" :diff="changeType=='ratio'?priceInfo.percent_change_ratio:priceInfo.percent_change_price" :formatter="(text) => fixedNumber(text,2) + '%'" tag="sup" class="fz-12" /></span>
+              <span class="fs-14" to="/">涨幅：<DiffLabel slot="activator" :diff="changeType=='ratio'?priceInfo.percent_change_ratio:priceInfo.percent_change_price" :formatter="(text) => fixedNumber(text * 100,2) + '%'" tag="sup" class="fz-12" /></span>
             </div>
           </div>
         </div>

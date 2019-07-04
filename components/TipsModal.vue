@@ -11,13 +11,13 @@
         </div>
         <div v-if="type == 'abct' || type == 'issue' " class="mt-10">
           <p class="tips-title fs-20 fb ">发行规则</p>
+          <div>
+            <b-table stacked outlined :items="tabitems" :fields="fields"></b-table>
+          </div>
           <img style="width:100%" src="~/assets/imgs/icon_issue.png">
           <p class="tips-info-text">现阶段ABCT将以免费赠与的方式发行，总量20亿，以天为周期定量解锁，每天最低解锁864000。</p>
           <p class="tips-info-text">1. 投票给IOSTABC节点的用户，将参与瓜分每天的864000个ABCT，根据投票数占IOSTABC总票池的比例自动分发。</p>
           <p class="tips-info-text">2. 另外会不定期做一些活动赠与部分ABCT，这部分具体数⽬要视情况⽽定。</p>
-          <div>
-            <b-table stacked outlined :items="tabitems" :fields="fields"></b-table>
-          </div>
         </div>
         <div v-if="type == 'abct' || type == 'exchange' " class="mt-10">
           <p class="tips-title fs-20 fb ">兑换规则</p>
@@ -41,18 +41,28 @@ export default {
       },
       type:'abct',
       fields:[
-        {key:'vote',label:'所投票数'},
-        {key:'abctnumber',label:'分红ABCT/日'},
+        {key:'vote',label:'我的票数'},
+        {key:'abctnumber',label:'我的ABCT/日'},
+        {key:'voteincome',label:'投票收益/日'},
+        {key:'otherincome',label:'额外收益/日'},
         {key:'votes',label:'节点票数(浮动)'},
         {key:'iostnumber',label:'回购资金/日'},
         {key:'abctday',label:'ABCT发行量/日'},
+        {key:'abctprice',label:'兑换价格'},
       ],
       tabitems:[
-        {vote:10000, abctnumber:26.18, votes:'3300万', iostnumber:'6000 IOST', abctday :'864000'}
+        {vote:'100,0000', abctnumber:26181,voteincome:'88.64 IOST',otherincome:'181.8125 IOST', votes:'3300万', iostnumber:'6000 IOST', abctday :'864000',abctprice:'0.006944 IOST/ABCT'}
       ]
     }
   },
+  mounted(){
+    // this.initData()
+  },
   methods:{
+    // initData(){
+    //   this.walletAccount = this.$store.getters.getWalletAccount
+    //   Promise.all([this.$rpc.blockchain.getAccountInfo(this.walletAccount)])
+    // },
     showModal(type){
       this.type = type
       this.$refs['tips-modal'].show()

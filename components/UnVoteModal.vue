@@ -29,7 +29,8 @@ export default {
   methods:{
     getAccountInfo(){
       this.$rpc.blockchain.getAccountInfo(this.walletAccount).then(account => {
-        this.voteList = account.vote_infos
+        let votelist = account.vote_infos
+        this.voteList = votelist.filter(item => item.option != 'iostabc')
       })
     },
     showModal(){

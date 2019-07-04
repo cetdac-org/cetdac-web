@@ -1,7 +1,8 @@
 export default function API(axios) {
   axios.defaults.baseURL = 'https://www.iostabc.com/endpoint'
 
-  const apiUrl = 'https://www.iostabc.com/api'
+  const apiUrl = 'https://www.iostabc.com/api/abctest'
+  const iosturl = 'https://www.iostabc.com/api'
   
   axios.interceptors.response.use(function (res) {
     return res.data ? res.data : Promise.reject(res)
@@ -16,13 +17,13 @@ export default function API(axios) {
       return axios.get(`/getTokenBalance/${id}/abctest/1`)
     },
     getProducerInfo (producer) {
-      return axios.get(`${apiUrl}/producer/${producer}`)
+      return axios.get(`${iosturl}/producer/${producer}`)
     },
     getPrice () {
-      return axios.get(`${apiUrl}/abct/price`)
+      return axios.get(`${apiUrl}/price`)
     },
     getObtainHistory ({ page = 1, size = 20 } = {}) {
-      return axios.get(`${apiUrl}/abct/historyobtainabct`,{
+      return axios.get(`${apiUrl}/historyobtainabct`,{
         params: {
           page,
           size,
@@ -30,7 +31,7 @@ export default function API(axios) {
       })
     },
     getIssueHistory (account, { page = 1, size = 20 } = {}) {
-      return axios.get(`${apiUrl}/abct/issueobtainabct`,{
+      return axios.get(`${apiUrl}/issueobtainabct`,{
         params: {
           account,
           page,
@@ -39,7 +40,7 @@ export default function API(axios) {
       })
     },
     getExchangeHistory (account, { page = 1, size = 20 } = {}) {
-      return axios.get(`${apiUrl}/abct/exchangeobtainabct`,{
+      return axios.get(`${apiUrl}/exchangeobtainabct`,{
         params: {
           account,
           page,
@@ -48,7 +49,7 @@ export default function API(axios) {
       })
     },
     getRechargeHistory ({ page = 1, size = 20 } = {}) {
-      return axios.get(`${apiUrl}/abct/historytopupabct`,{
+      return axios.get(`${apiUrl}/historytopupabct`,{
         params: {
           page,
           size,

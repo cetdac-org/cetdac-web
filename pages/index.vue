@@ -298,11 +298,11 @@ export default {
       }, 1000);
     },
     fixedNumber(numbers,fixed){
-      let number = new Number(numbers)
-      number = number.toFixed(10)
-      if (!number) {
+      if (!numbers) {
         return 0
       }
+      let number = new Number(numbers)
+      number = number.toFixed(10)
       let str = "^(.*\\..{" + fixed + "}).*$" 
       number = String(number).replace( new RegExp(str),"$1")
       number = Number(number)

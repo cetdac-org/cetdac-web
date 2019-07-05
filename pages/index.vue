@@ -6,7 +6,7 @@
           <img class="icon-abct" src="~/assets/imgs/icon_abct.svg" width="75">
           <div class="banner-content-right">
             <div>
-              <span @click="ruleModal('abct')">什么是ABCT</span>
+              <span @click="ruleModal('abct')">什么是ABCT ></span>
             </div>
             <div class="mt-8">
               <!-- fixedNumber(price,6) -->

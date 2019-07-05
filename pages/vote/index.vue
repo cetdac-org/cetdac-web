@@ -33,8 +33,7 @@
         </b-input-group-append>
       </b-input-group>
       <div style="padding:10px">
-        <div class="scale-tip">投 {{'\xa0'+(voteNumber || 0)+'\xa0'}} IOST 给 IOSTABC，你将参与瓜分每天{{'\xa0'+dayABCT+'\xa0'}}个 ABCT</div>
-        <div class="scale-tip">当前IOSTABC总票数{{'\xa0'+parseInt(producerVotes) + '\xa0'}}, 每天可分得 {{'\xa0'+fixedNumber(abctNumber,6) + '\xa0'}} ABCT </div> 
+        <div class="scale-tip">当前IOSTABC总票数{{'\xa0'+parseInt(producerVotes) + '\xa0'}}, 投 {{'\xa0'+(voteNumber || 0)+'\xa0'}} IOST 给 IOSTABC，每天可分得 {{'\xa0'+fixedNumber(abctNumber,6) + '\xa0'}} ABCT </div> 
         <div class="scale-tip mt-2 fb">{{fixedNumber(abctNumber,6) + '\xa0'}} ABCT = {{'\xa0'+fixedNumber(iostNumber,6) + '\xa0'}} IOST = {{fixedNumber(priceNumber,6) + (/cn/i.test(lang.lang)?' CNY':' USD')}}</div>
       </div>
     </div>

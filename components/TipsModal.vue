@@ -14,7 +14,8 @@
           <div>
             <b-table stacked outlined :items="tabitems" :fields="fields"></b-table>
           </div>
-          <img style="width:100%" src="~/assets/imgs/icon_issue.png">
+          <img style="width:100%" v-if="/cn/i.test(lang.lang)" src="~/assets/imgs/icon_issue.png">
+          <img style="width:100%" v-else src="~/assets/imgs/icon_issue_en.png">
           <p class="tips-info-text">现阶段ABCT将以免费赠与的方式发行，总量20亿，以天为周期定量解锁，每天最低解锁864000。</p>
           <p class="tips-info-text">1. 投票给IOSTABC节点的用户，将参与瓜分每天的864000个ABCT，根据投票数占IOSTABC总票池的比例自动分发。</p>
           <p class="tips-info-text">2. 另外会不定期做一些活动赠与部分ABCT，这部分具体数⽬要视情况⽽定。</p>
@@ -31,6 +32,9 @@
 </template>
 
 <script>
+
+import { mapState } from "vuex"
+
 export default {
   data(){
     return {
@@ -54,6 +58,9 @@ export default {
         {vote:'100,0000', abctnumber:26181,voteincome:'88.64 IOST',otherincome:'181.8125 IOST', votes:'3300万', iostnumber:'6000 IOST', abctday :'864000',abctprice:'0.006944 IOST/ABCT'}
       ]
     }
+  },
+  computed:{
+    ...mapState(["lang"]),
   },
   mounted(){
     // this.initData()

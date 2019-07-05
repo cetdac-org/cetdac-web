@@ -1,13 +1,13 @@
 {
     "en_US": {
-        "ABCT数量：": "ABCT数量：",
-        "IOST数量：": "IOST数量：",
-        "充值块：": "充值块：",
-        "兑换IOST数量_c48e": "兑换IOST数量：",
-        "分红块：": "分红块：",
-        "分红数量：": "分红数量：",
-        "所在块：": "所在块：",
-        "暂无数据": "暂无数据"
+        "ABCT数量：": "ABCT amount: ",
+        "IOST数量：": "IOST amount: ",
+        "充值块：": "Deposit block",
+        "兑换IOST数量_c48e": "Exchange IOST: ",
+        "分红块：": "Block: ",
+        "分红数量：": "Diviend amount: ",
+        "所在块：": "Block: ",
+        "暂无数据": "No data"
     },
     "zh_Hans_CN": {
         "ABCT数量：": "ABCT数量：",

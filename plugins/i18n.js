@@ -18,7 +18,7 @@ export default ({
       if (/^lang=/.test(matchs[i])) {
         const lang = matchs[i].replace(/^lang=/, "");
         if (lang && (langs.indexOf(lang) !== -1)) {
-          console.log(lang);
+          console.log('lang==',lang);
           const expire = new Date(new Date().getTime() + (30 * 24 * 60 * 60 * 1000));
           cookies.setItem(window.document, "lang", lang, expire, "/");
         }

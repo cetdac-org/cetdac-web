@@ -1,6 +1,9 @@
 <template>
   <div class="abct-web-index">
-    <div class="banner-bg">
+    <div>
+      <b-form-select v-model="language" :options="langs" @change="changeLang"></b-form-select>
+    </div>
+    <div class="banner-bg mt-10">
       <div class="banner">
         <div class="banner-content d-flex">
           <img class="icon-abct" src="~/assets/imgs/icon_abct.svg" width="75">
@@ -93,6 +96,8 @@ import TipsModal from '~/components/TipsModal.vue'
 import UnVoteModal from '~/components/UnVoteModal.vue'
 import { CountUp } from 'countup.js/dist/countUp';
 import { mapState } from "vuex"
+import cookies from "~/plugins/cookies"
+
 
 export default {
   components: {
@@ -125,7 +130,13 @@ export default {
       changeType:'ratio',
       isloading: false,
       txhash:'',
-      modalText:''
+      modalText:'',
+      language:'zh_Hans_CN',
+      langs:[
+        {value:"en_US",text:'English'},
+        {value:"zh_Hans_CN",text:'简体中文'},
+        {value:"zh_Hant_HK",text:'繁體中文'},
+      ]
     }
   },
   head() {
@@ -153,6 +164,7 @@ export default {
         this.font_size = 'fs-17'
       }
     }
+    this.language = /cn/i.test(this.lang.lang)? 'zh_Hans_CN':/en/i.test(this.lang.lang)?'en_US':'zh_Hant_HK'
   },  
   methods:{
     //账户信息
@@ -194,6 +206,13 @@ export default {
       this.modalText = data.text
       this.txhash = data.txhash
       this.$refs.statusModal.show()
+    },
+    changeLang(item){
+      const date = new Date();
+      const expire = new Date(date.getTime() + 30 * 24 * 60 * 60 * 1000);
+      cookies.setItem(document, "lang", item, expire, "/");
+      this.$store.dispatch('setLang', item)
+      location.href = location.origin
     },
     getPriceDown(){
       this.getPrice()

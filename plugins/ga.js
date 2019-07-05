@@ -10,9 +10,10 @@ if (process.env.NODE_ENV === "production") {
   ** Set the current page
   */
 
-  ga("create", "UA-50634980-1")
+  ga("create", "UA-143305577-1")
   ga("set", "page", location.href)
   ga("send", "pageview")
+  
   /*
   ** Every time the route changes (fired on initialization too)
   */

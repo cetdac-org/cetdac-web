@@ -149,24 +149,24 @@ export default {
       })
     },
     vote(){
-      let voteNumber = this.voteNumber || 0
-      if (voteNumber <= 0) {
+      let tmpvoteNumber = this.voteNumber || 0
+      if (tmpvoteNumber <= 0) {
         this.variant = 'danger'
         this.alertText = '投票数量不能小于0'
         this.dismissCountDown = this.dismissSecs
         return
       } 
-      if (voteNumber > this.accountInfo.balance) {
+      if (tmpvoteNumber > this.accountInfo.balance) {
         this.variant = 'danger'
         this.alertText = '投票数量超过可使用余额'
         this.dismissCountDown = this.dismissSecs
         return
       }
       this.isshowModal = false
-      this.modalText = `投票已完成，投给iostabc ${'\xa0'+voteNumber+'\xa0'}票，按当前节点总票数，每天会分得${'\xa0'+ this.fixedNumber(this.abctNumber,6)+'\xa0'} abct`
+      this.modalText = `投票已完成，投给iostabc ${'\xa0'+tmpvoteNumber+'\xa0'}票，按当前节点总票数，每天会分得${'\xa0'+ this.fixedNumber(this.abctNumber,6)+'\xa0'} abct`
       this.txMessage = ''
       const iost = IWalletJS.newIOST(IOST)
-      const ctx = iost.callABI('vote_producer.iost', "vote", [this.walletAccount, 'iostabc',voteNumber.toString()])
+      const ctx = iost.callABI('vote_producer.iost', "vote", [this.walletAccount, 'iostabc',tmpvoteNumber.toString()])
       ctx.gasLimit = 1000000
       iost.signAndSend(ctx).on('pending', (trx) => {
         if (!this.isshowModal) {
@@ -174,6 +174,12 @@ export default {
           this.txhash = trx
           this.voteNumber = ''
           this.$refs.statusModal.show()
+          ga('send','event',{
+            eventCategory: `ABCTvote`, //类型 vote  
+            eventAction: `voteToIOSTABC`, // 投票的节点
+            eventLabel:`account:${this.walletAccount},amount:${tmpvoteNumber},status:success`,
+            eventValue: parseInt(tmpvoteNumber) //投票的数量 失败为0 不统计
+          })
         }
         // this.isloading = true
       })
@@ -189,6 +195,12 @@ export default {
           this.txhash = result.tx_hash
           this.voteNumber = ''
           this.$refs.statusModal.show()
+          ga('send','event',{
+            eventCategory: `ABCTvote`, //类型 vote  
+            eventAction: `voteToIOSTABC`, // 投票的节点 
+            eventLabel:`account:${this.walletAccount},amount:${tmpvoteNumber},status:success`,
+            eventValue: parseInt(tmpvoteNumber) //投票的数量 失败为0 不统计
+          })
         }
       })
       .on('failed', (failed) => {

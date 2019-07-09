@@ -164,6 +164,12 @@ export default {
           this.txhash = trx
           this.exchangeNumber = ''
           this.$refs.statusModal.show()
+          ga('send','event',{
+            eventCategory: `ABCTexchange`, //类型 exchange
+            eventAction: `exchangeToIOST`, 
+            eventLabel:`account:${this.walletAccount},amount:${exchangeNumber},status:success`,
+            eventValue: parseInt(exchangeNumber) //兑换的数量 失败为0 不统计
+          })
         }
       })
       .on('success', (result) => {
@@ -178,6 +184,12 @@ export default {
           this.exchangeNumber = ''
           this.txhash = result.tx_hash
           this.$refs.statusModal.show()
+          ga('send','event',{
+            eventCategory: `ABCTexchange`, //类型 exchange
+            eventAction: `exchangeToIOST`, 
+            eventLabel:`account:${this.walletAccount},amount:${exchangeNumber},status:success`,
+            eventValue: parseInt(exchangeNumber) //兑换的数量 失败为0 不统计
+          })
         }
       })
       .on('failed', (failed) => {

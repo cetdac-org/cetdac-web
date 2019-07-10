@@ -9,9 +9,7 @@ export default ({
   store,
 }) => {
   if (process.client) {
-    const langs = store.state.lang.locales.map((item) => {
-      return item.val;
-    });
+    const langs = store.state.lang.locales;
     const search = window.location.search || "";
     const matchs = search.trim().replace(/^[?#&]/, "").split("&");
     for (let i = 0; i < matchs.length; i++) {
@@ -24,6 +22,8 @@ export default ({
         }
       }
     }
+  }else{
+
   }
 
   if (Vue.$plugins_i18n_installed) {

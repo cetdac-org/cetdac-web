@@ -3,7 +3,6 @@ export const state = () => ({
   errorText: null,
   successText: null,
   walletAccount:null,
-  lang:null,
   axios: null
 })
 
@@ -20,9 +19,6 @@ export const mutations = {
   setWalletAccount(state, data){
     state.walletAccount = data
   },
-  setLang(state, data){
-    state.lang = data
-  }
 }
 export const getters = {
   getWalletAccount ( state ){

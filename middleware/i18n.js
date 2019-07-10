@@ -5,8 +5,7 @@ export default function({ store, query, error, req, res, replace, hotReload }) {
   if (hotReload) return;
 
   // 从query读取lang并设给cookie，防止跳转后丢lang
-  const langs = store.state.lang.locales.map(item => item.val);
-
+  const langs = store.state.lang.locales;
   if (query.lang && langs.indexOf(query.lang) !== -1) {
     if (process.client) {
       cookieParser.setItem(
@@ -60,7 +59,7 @@ export default function({ store, query, error, req, res, replace, hotReload }) {
   }
 
   let lang = query.lang || cookies.lang || preferLanguage;
-  if (!store.state.lang.locales.find(item => item.value === lang)) {
+  if (!store.state.lang.locales.find(item => item === lang)) {
     if (!process.SERVER_BUILD) {
       const date = new Date();
       const expire = new Date(date.getTime() + 30 * 24 * 60 * 60 * 1000);

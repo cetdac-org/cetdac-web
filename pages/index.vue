@@ -69,6 +69,14 @@
         <span @click="ruleModal('exchange')">兑换规则</span>
       </div>
     </div>
+    <div class="tip-view mt-15">
+      <img v-if="/cn/i.test(this.lang.lang)" class="wallet-img" src="~/assets/imgs/wallet_cn.png">
+      <img v-else class="wallet-img" src="~/assets/imgs/wallet_en.png">
+      <div class="qrcode">
+        <img src="~/assets/imgs/download.svg" alt="">
+        <div class="mt-15">扫码下载PureWallet，随时管理你的ABCT收益</div>
+      </div>
+    </div>
     <HistoryModal ref="historyModal" />
     <TipsModal ref="tipsModal" />
     <UnVoteModal ref="unvoteModal" @unVote="unvoteTip" />
@@ -211,7 +219,6 @@ export default {
       const date = new Date();
       const expire = new Date(date.getTime() + 30 * 24 * 60 * 60 * 1000);
       cookies.setItem(document, "lang", item, expire, "/");
-      this.$store.commit('setLang', item) 
       location.href = location.origin
     },
     getPriceDown(){
@@ -406,6 +413,19 @@ export default {
         display: flex;
         justify-content: space-between;
       }
+    }
+  }
+  .tip-view {
+    display: flex;
+    justify-content: space-between;
+    .wallet-img{
+      width: 200px;
+    }
+    .qrcode{
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
   }
   .tips-view{

@@ -138,7 +138,7 @@ export default {
       this.producerVotes = res.votes
     })
     this.getPriceDown()
-    
+    console.log(this.lang)
   },
   methods:{
     getAccountInfo(){

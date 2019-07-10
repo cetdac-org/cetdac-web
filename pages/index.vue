@@ -164,6 +164,7 @@ export default {
         this.font_size = 'fs-17'
       }
     }
+    console.log(this.lang)
     this.language = /cn/i.test(this.lang.lang)? 'zh_Hans_CN':/en/i.test(this.lang.lang)?'en_US':'zh_Hant_HK'
   },  
   methods:{
@@ -211,7 +212,7 @@ export default {
       const date = new Date();
       const expire = new Date(date.getTime() + 30 * 24 * 60 * 60 * 1000);
       cookies.setItem(document, "lang", item, expire, "/");
-      this.$store.dispatch('setLang', item)
+      this.$store.commit('setLang', item) 
       location.href = location.origin
     },
     getPriceDown(){

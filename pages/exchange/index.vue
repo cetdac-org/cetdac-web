@@ -202,6 +202,11 @@ export default {
           this.txhash = failed.tx_hash ? failed.tx_hash:''
           this.txMessage = JSON.stringify(failed)
           this.$refs.statusModal.show()
+          ga('send','event',{
+            eventCategory: `ABCTexchangeFailed`, //类型 exchange
+            eventAction: `exchangeToIOST`, 
+            eventLabel:`account:${this.walletAccount},amount:${exchangeNumber},message:${JSON.stringify(failed)}`,
+          })
         }
         // this.variant = 'danger'
         // this.alertText = '兑换失败'

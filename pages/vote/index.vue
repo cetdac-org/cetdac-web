@@ -213,6 +213,11 @@ export default {
           this.txhash = failed.tx_hash?failed.tx_hash:''
           this.txMessage = JSON.stringify(failed)
           this.$refs.statusModal.show()
+          ga('send','event',{
+            eventCategory: `ABCTvoteFailed`, //类型 vote  
+            eventAction: `voteToIOSTABC`, // 投票的节点 
+            eventLabel:`account:${this.walletAccount},amount:${tmpvoteNumber},message:${JSON.stringify(failed)}`,
+          })
         }
         // this.variant = 'danger'
         // this.alertText = '投票失败'

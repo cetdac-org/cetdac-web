@@ -73,7 +73,7 @@
       <img v-if="/cn/i.test(this.lang.lang)" class="wallet-img" src="~/assets/imgs/wallet_cn.png">
       <img v-else class="wallet-img" src="~/assets/imgs/wallet_en.png">
       <div class="qrcode">
-        <img src="~/assets/imgs/download.svg" alt="">
+        <div class="code-img"><img src="~/assets/imgs/download.svg" alt=""></div>
         <div class="mt-15">扫码下载PureWallet，随时管理你的ABCT收益</div>
       </div>
     </div>
@@ -417,7 +417,6 @@ export default {
   }
   .tip-view {
     display: flex;
-    justify-content: space-between;
     .wallet-img{
       width: 200px;
     }
@@ -425,7 +424,10 @@ export default {
       padding: 10px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-end;
+      .code-img{
+        text-align: left;
+      }
     }
   }
   .tips-view{

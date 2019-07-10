@@ -83,7 +83,6 @@ export default {
             eventLabel:`account:${this.walletAccount},producer:${item.option},amount:${item.votes},message:${JSON.stringify(failed)}`,
           })
         }
-        
       })
     }
   }

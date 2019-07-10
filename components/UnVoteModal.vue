@@ -50,12 +50,24 @@ export default {
         if (!this.isshowModal) {
           this.isshowModal = true
           this.$emit('unVote',{status:'pending',text:`撤回投票完成,撤回投给${'\xa0'+item.option+'\xa0' + item.votes+'\xa0'}票`,txhash:trx})
+          ga('send','event',{
+            eventCategory: `Unvote`, //类型 unvote  
+            eventAction: `Unvote`, // 投票的节点
+            eventLabel:`account:${this.walletAccount},producer:${item.option},amount:${item.votes},status:success`,
+            eventValue: parseInt(item.votes) //投票的数量 失败为0 不统计
+          })
         }
       })
       .on('success', (result) => {
         if (!this.isshowModal) {
           this.isshowModal = true
           this.$emit('unVote',{status:'success',text:`撤回投票完成,撤回投给${'\xa0'+item.option+'\xa0' + item.votes+'\xa0'}票`,txhash:result.tx_hash})
+          ga('send','event',{
+            eventCategory: `Unvote`, //类型 unvote  
+            eventAction: `Unvote`, // 投票的节点
+            eventLabel:`account:${this.walletAccount},producer:${item.option},amount:${item.votes},status:success`,
+            eventValue: parseInt(item.votes) //投票的数量 失败为0 不统计
+          })
         }
       })
       .on('failed', (failed) => {

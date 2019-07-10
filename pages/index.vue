@@ -164,7 +164,6 @@ export default {
         this.font_size = 'fs-17'
       }
     }
-    console.log(this.lang)
     this.language = /cn/i.test(this.lang.lang)? 'zh_Hans_CN':/en/i.test(this.lang.lang)?'en_US':'zh_Hant_HK'
   },  
   methods:{

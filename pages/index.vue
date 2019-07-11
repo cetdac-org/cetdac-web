@@ -174,6 +174,7 @@ export default {
       }
     }
     this.ref = this.$route.query.ref || ''
+    window.sessionStorage.setItem('ref',this.ref)
     this.language = /cn/i.test(this.lang.lang)? 'zh_Hans_CN':/en/i.test(this.lang.lang)?'en_US':'zh_Hant_HK'
   },  
   methods:{

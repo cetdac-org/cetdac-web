@@ -23,7 +23,8 @@
       <div class="font-norwester fs-20 scale-title">1 ABCT = {{fixedNumber(price, 6)}} {{`${changeType=='ratio'?'IOST':/cn/i.test(lang.lang)?'CNY':'USD'}`}}
         <img class="switch" src="~/assets/imgs/icon_switch.svg" @click="priceChange" width="15">
       </div>
-      <div class="scale-desc">你可以在任何时间选择把 ABCT 兑换为IOST我们只收取0.5%的手续费</div>
+      <div class="scale-desc" v-if="ref == 'purewallet'">你可以在任何时间选择把 ABCT 兑换为IOST我们只收取0.5%的手续费</div>
+      <div class="scale-desc" v-else>你可以在任何时间选择把 ABCT 兑换为IOST我们只收取1%的手续费</div>
       <b-input-group>
         <b-form-input focus type="number" v-model="exchangeNumber" placeholder="请输入兑换数量" autocomplete="off" @update="inputChange"></b-form-input>
         <b-input-group-append>
@@ -98,7 +99,7 @@ export default {
       modalText:'',
       txMessage:'',
       txhash:'',
-
+      ref:''
     }
   },
   head() {
@@ -107,6 +108,7 @@ export default {
     }
   },
   mounted () {
+    this.ref = window.sessionStorage.getItem('ref')
     if (this.$store.getters.getWalletAccount) {
       this.walletAccount = this.$store.getters.getWalletAccount
       this.getTokenBalance()
@@ -156,7 +158,7 @@ export default {
       // this.modalText = '兑换已完成'
       this.modalText = `兑换完成，${exchangeNumber + '\xa0'}ABCT 兑换为 ${this.fixedNumber(exchangeNumber * this.price, 6) +'\xa0'}IOST`
       this.txMessage = ''
-      const ctx = iost.callABI('ContractAi3wmFKBRVqfpMvZ2iUL2DtrvaMPXA4JZJypWvW6WaqM', "exchange", [this.walletAccount, exchangeNumber.toString(),''])
+      const ctx = iost.callABI('ContractAi3wmFKBRVqfpMvZ2iUL2DtrvaMPXA4JZJypWvW6WaqM', "exchange", [this.walletAccount, exchangeNumber.toString(),this.ref])
       ctx.gasLimit = 1000000
       iost.signAndSend(ctx).on('pending', (trx) => {
         if (!this.isshowModal) {

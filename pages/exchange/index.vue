@@ -31,7 +31,7 @@
           <div class="all-btn" @click="exchangeNumber = tokenbalance;inputChange()" >全部</div>
         </b-input-group-append>
       </b-input-group>
-      <div class="scale-tip">{{exchangeNumber || 0}} ABCT = {{fixedNumber(exchangeNumber * price, 6)}} IOST = {{ priceNumber + (/cn/i.test(lang.lang)?" CNY":" USD") }}</div>
+      <div class="scale-tip">{{exchangeNumber || 0}} ABCT = {{fixedNumber(exchangeNumber * priceInfo.price_ratio, 6)}} IOST = {{ priceNumber + (/cn/i.test(lang.lang)?" CNY":" USD") }}</div>
     </div>
     <div class="exchange-view">
       <div class="icon-view">

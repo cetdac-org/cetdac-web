@@ -181,6 +181,9 @@ export default {
         // this.exchangeNumber = ''
         // this.getTokenBalance()
         // this.dismissCountDown = this.dismissSecs
+        if (result.tx_hash) {
+          this.getTokenBalance()
+        }
         if (!this.isshowModal) {
           this.isshowModal = true
           this.exchangeNumber = ''

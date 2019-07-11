@@ -141,7 +141,7 @@ export default {
   },
   methods:{
     getAccountInfo(){
-      this.$rpc.blockchain.getAccountInfo(this.walletAccount).then(account => {
+      this.$rpc.blockchain.getAccountInfo(this.walletAccount,true).then(account => {
         this.accountInfo = account
         this.votebalances= account.vote_infos.reduce((reduced, vote) => vote.votes ? reduced + vote.votes : 0, 0)
         this.frozenbalances =  account.frozen_balances.reduce((reduced,frozen) => frozen.amount ? reduced+frozen.amount:0,0)
@@ -189,6 +189,9 @@ export default {
         // this.voteNumber = ''
         // this.getAccountInfo()
         // this.dismissCountDown = this.dismissSecs
+        if (result.tx_hash) {
+          this.getAccountInfo()
+        }
         if (!this.isshowModal) {
           this.isshowModal = true
           this.txhash = result.tx_hash

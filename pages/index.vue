@@ -180,7 +180,7 @@ export default {
   methods:{
     //账户信息
     getAccountInfo(){
-      this.$rpc.blockchain.getAccountInfo(this.walletAccount).then(account => {
+      this.$rpc.blockchain.getAccountInfo(this.walletAccount,true).then(account => {
         this.accountInfo = account
         this.votebalances= account.vote_infos.reduce((reduced, vote) => vote.votes ? reduced + vote.votes : 0, 0)
         this.frozenbalances =  account.frozen_balances.reduce((reduced,frozen) => frozen.amount ? reduced+frozen.amount:0,0)
@@ -216,6 +216,7 @@ export default {
       }
       this.modalText = data.text
       this.txhash = data.txhash
+      this.getAccountInfo()
       this.$refs.statusModal.show()
     },
     changeLang(item){

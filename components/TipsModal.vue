@@ -16,7 +16,7 @@
           </div>
           <img style="width:100%" v-if="/cn/i.test(lang.lang)" src="~/assets/imgs/icon_issue.png">
           <img style="width:100%" v-else src="~/assets/imgs/icon_issue_en.png">
-          <p class="tips-info-text">现阶段ABCT将以免费赠与的方式发行，总量20亿，以天为周期定量解锁，每天最低解锁864000。</p>
+          <p class="tips-info-text">现阶段ABCT将以免费赠与的方式发行，总量20亿，以天为周期定量解锁，每天最多解锁864000。</p>
           <p class="tips-info-text">1. 投票给IOSTABC节点的用户，将参与瓜分每天的864000个ABCT，根据投票数占IOSTABC总票池的比例自动分发。</p>
           <p class="tips-info-text">2. 另外会不定期做一些活动赠与部分ABCT，这部分具体数⽬要视情况⽽定。</p>
         </div>
@@ -24,7 +24,7 @@
           <p class="tips-title fs-20 fb ">兑换规则</p>
           <p class="tips-info-text">1. 你可以在任何时间把ABCT兑换成IOST，我们会每天把IOSTABC节点奖励收益的50%充值到兑换奖金池，兑换奖金池的余额越多，兑换的价格就越高。</p>
           <p class="tips-info-text">2. 兑换的IOST即时到账。</p>
-          <p class="tips-info-text">3. 兑换得到的ABCT将于当日销毁。</p>
+          <p class="tips-info-text">3. 兑换得到的ABCT立即销毁。</p>
         </div>
       </b-card-text>
     </b-card>

@@ -69,9 +69,9 @@
         <span @click="ruleModal('exchange')">兑换规则</span>
       </div>
     </div>
-    <div class="tip-view mt-15">
-      <img v-if="/cn/i.test(this.lang.lang)" class="wallet-img" src="~/assets/imgs/wallet_cn.png">
-      <img v-else class="wallet-img" src="~/assets/imgs/wallet_en.png">
+    <div class="tip-view mt-15" v-if="ref != 'purewallet'">
+      <img v-if="/cn/i.test(this.lang.lang)" class="wallet-img" style="width:200px;height:400px" src="~/assets/imgs/wallet_cn.png">
+      <img v-else class="wallet-img" style="width:200px;height:400px" src="~/assets/imgs/wallet_en.png">
       <div class="qrcode">
         <div class="code-img"><img src="~/assets/imgs/download.svg" alt=""></div>
         <div class="mt-15">扫码下载PureWallet，随时管理你的ABCT收益</div>
@@ -140,6 +140,7 @@ export default {
       txhash:'',
       modalText:'',
       language:'zh_Hans_CN',
+      ref:'',
       langs:[
         {value:"en_US",text:'English'},
         {value:"zh_Hans_CN",text:'简体中文'},
@@ -172,6 +173,7 @@ export default {
         this.font_size = 'fs-17'
       }
     }
+    this.ref = this.$route.query.ref || ''
     this.language = /cn/i.test(this.lang.lang)? 'zh_Hans_CN':/en/i.test(this.lang.lang)?'en_US':'zh_Hant_HK'
   },  
   methods:{
@@ -417,10 +419,8 @@ export default {
   }
   .tip-view {
     display: flex;
-    .wallet-img{
-      width: 200px;
-    }
     .qrcode{
+      flex: 1;
       padding: 10px;
       display: flex;
       flex-direction: column;

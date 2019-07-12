@@ -69,7 +69,7 @@
         <span @click="ruleModal('exchange')">兑换规则</span>
       </div>
     </div>
-    <div class="tip-view mt-15" v-if="ref != 'purewallet'">
+    <div class="tip-view mt-15" v-if="(ref != 'purewallet' && ref != 'tp')">
       <img v-if="/cn/i.test(this.lang.lang)" class="wallet-img" style="width:200px;height:400px" src="~/assets/imgs/wallet_cn.png">
       <img v-else class="wallet-img" style="width:200px;height:400px" src="~/assets/imgs/wallet_en.png">
       <div class="qrcode">

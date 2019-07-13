@@ -29,7 +29,7 @@
       <b-input-group>
         <b-form-input type="number" v-model="voteNumber" placeholder="请输入投票数量" @update="inputChange" autocomplete="off"></b-form-input>
         <b-input-group-append>
-          <div class="all-btn" @click="voteNumber = fixedNumber(accountInfo.balance,6);inputChange()">全部</div>
+          <div class="all-btn" @click="voteNumber = fixedNumber(accountInfo.balance,0);inputChange()">全部</div>
         </b-input-group-append>
       </b-input-group>
       <div style="padding:10px">

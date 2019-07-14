@@ -23,8 +23,8 @@
         <div v-if="type == 'abct' || type == 'exchange' " class="mt-10">
           <p class="tips-title fs-20 fb ">兑换规则</p>
           <p class="tips-info-text">1. 你可以在任何时间把ABCT兑换成IOST，我们会每天把IOSTABC节点奖励收益的50%充值到兑换奖金池，兑换奖金池的余额越多，兑换的价格就越高。</p>
-          <p class="tips-info-text">2. 兑换的IOST即时到账。</p>
-          <p class="tips-info-text">3. 兑换得到的ABCT立即销毁。</p>
+          <p class="tips-info-text">2. 兑换得到的IOST即时到账。</p>
+          <p class="tips-info-text">3. 完成兑换ABCT立即销毁。</p>
         </div>
       </b-card-text>
     </b-card>

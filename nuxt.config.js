@@ -16,15 +16,10 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       {
         rel: 'stylesheet',
-        href:
-          'https://cdn.bootcss.com/animate.css/3.7.2/animate.min.css'
-      },
-      {
-        rel: 'stylesheet',
         type: 'text/css',
         href:
           '/loading.css'
-      },
+      }
     ]
   },
   /*

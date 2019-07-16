@@ -23,6 +23,7 @@ if(process.env.NODE_ENV === "dev" || process.env.NODE_ENV === "development"){
     fileDomain = "/upload"
 }
 else if(process.env.NODE_ENV === "production"){
+    clientApiDomain = "https://blockservice.bitapp.net.cn/admin/"
     if(process.SERVER_BUILD){
         if(process.env.SERVER_ENV === "pre"){
             //预发布环境
@@ -39,7 +40,8 @@ else if(process.env.NODE_ENV === "production"){
             cdnDomain = ""
         }
     }else{
-        clientApiDomain = location.protocol + "//"+ location.host
+        //clientApiDomain = location.protocol + "//"+ location.host
+        clientApiDomain = "https://blockservice.bitapp.net.cn/admin/"
         if(/test/.test(location.host)){
             cdnDomain = ""
         }

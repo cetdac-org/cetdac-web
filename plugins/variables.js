@@ -16,8 +16,8 @@ let serverApiDomain = "",
 if(process.env.NODE_ENV === "dev" || process.env.NODE_ENV === "development"){
     //开发环境
     protocol = "https:"
-    clientApiDomain = ""
-    serverApiDomain = ""
+    clientApiDomain = "https://blockservice.bitapp.net.cn/admin/"
+    serverApiDomain = "https://blockservice.bitapp.net.cn/admin/"
     //webSocketDomain = "ws://dev.viabtc.com:8008"
     cdnDomain = ""
     fileDomain = "/upload"
@@ -26,7 +26,7 @@ else if(process.env.NODE_ENV === "production"){
     if(process.SERVER_BUILD){
         if(process.env.SERVER_ENV === "pre"){
             //预发布环境
-            serverApiDomain = ""
+            serverApiDomain = "https://blockservice.bitapp.net.cn/admin/"
             protocol = "https:"
             //webSocketDomain = "wss://test.viabtc.com:8443"
             cdnDomain = ""
@@ -34,7 +34,7 @@ else if(process.env.NODE_ENV === "production"){
         else{
             //线上环境
             protocol = "https:"
-            serverApiDomain = "http://localhost:4001"
+            serverApiDomain = "https://blockservice.bitapp.net.cn/admin/"
             //webSocketDomain = "wss://socket.viabtc.com"
             cdnDomain = ""
         }

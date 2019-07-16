@@ -50,12 +50,11 @@ export default {
   padding-top: 10px;
   background-color: #1e252f;
 
-  position: absolute;
-  bottom: 0;
-  
+  // position: absolute;
+  // bottom: 0;
+
   .wrapper {
-    width: 60%;
-    min-width: 1200px;
+    max-width: 1200px;
     margin: 0 auto;
     height: 200px;
     .logo-area{
@@ -110,7 +109,6 @@ export default {
       display: flex;
       justify-content: space-between;
       color: #666;
-      width: 60%;
       margin: 0 auto;
       height: 50px;
       line-height: 50px;

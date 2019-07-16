@@ -1,14 +1,19 @@
 <template>
   <header class="header">
-    <div class="navbar d-flex">
-      <img src="~/assets/imgs/cetdac-logo.png" width="200">
-      <b-nav align="right">
-        <b-nav-item active>CETDAC</b-nav-item>
-        <b-nav-item>资料库</b-nav-item>
-        <b-nav-item target="_blank" href="https://www.coinex.org/">CoinEx Chain</b-nav-item>
-        <b-nav-item target="_blank" href="https://forum.coinex.org/">论坛</b-nav-item>
-      </b-nav>
-    </div>
+    <b-navbar toggleable="md" type="dark">
+      <b-navbar-brand href="/"><img src="~/assets/imgs/cetdac-logo.png" width="200"></b-navbar-brand>
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+      <b-collapse id="nav-collapse" is-nav>
+        <b-navbar-nav class="ml-auto">
+          <b-nav-item exact to="/">CETDAC</b-nav-item>
+          <b-nav-item target="_blank" href="https://www.coinex.com/">购买CET</b-nav-item>
+          <b-nav-item>资料库</b-nav-item>
+          <b-nav-item to="/words">海坡语录</b-nav-item>
+          <b-nav-item target="_blank" href="https://www.coinex.org/">CoinEx Chain</b-nav-item>
+          <b-nav-item target="_blank" href="https://forum.coinex.org/">论坛</b-nav-item>
+        </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
   </header>
 </template>
 
@@ -41,9 +46,6 @@
 
 <style lang="scss" scoped>
   .header{
-    width: 60%;
-    min-width: 1200px;
-    margin:0 auto;
     .icon-logo{
       font-size: 30px;
       color: #283149;
@@ -51,6 +53,9 @@
     .nav-link {
       display: block;
       padding: 8px 24px;
+    }
+    .nuxt-link-active{
+      color:white;
     }
     .develop{
       display:inline-block;

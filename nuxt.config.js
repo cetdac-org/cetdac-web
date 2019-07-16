@@ -19,6 +19,22 @@ module.exports = {
         type: 'text/css',
         href:
           '/loading.css'
+      },
+      {
+        rel: 'stylesheet',
+        type: 'text/css',
+        href:
+          '/barrager/css/barrager.css'
+      }
+    ],
+    script: [
+      {
+        src: "https://code.jquery.com/jquery-1.9.1.min.js",
+        type: "text/javascript"
+      },
+      {
+        src: "/barrager/js/jquery.barrager.js",
+        type: "text/javascript"
       }
     ]
   },
@@ -37,8 +53,7 @@ module.exports = {
     "~/plugins/cookies",
     '~/plugins/utils',
     { src: "~/plugins/i18n"},
-    {src:'~/plugins/service', ssr:true},
-    // { src: "~/plugins/exchangeAxios"},
+    { src: "~/plugins/exchangeAxios"},
     // { src: "~/plugins/awsome", ssr: false },
     { src: "~/plugins/ga", ssr: false}
   ],
@@ -47,8 +62,7 @@ module.exports = {
   */
   modules: [
     // Doc: https://bootstrap-vue.js.org/docs/
-    'bootstrap-vue/nuxt',
-    '@nuxtjs/axios'
+    'bootstrap-vue/nuxt'
   ],
   /*
   ** Global CSS

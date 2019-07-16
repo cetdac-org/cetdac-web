@@ -1,10 +1,11 @@
 <template>
   <div>
     <Header/>
+    <Alert/>
     <div class="">
       <nuxt/>
     </div>
-    <Footer position="mt-30"/>
+    <Footer class="mt-30"/>
   </div>
 </template>
 
@@ -12,11 +13,13 @@
 
 import Header from "~/components/Header.vue"
 import Footer from "~/components/Footer.vue"
+import Alert from "~/components/Alert.vue"
 
 export default {
   components: {
     Header,
-    Footer
+    Footer,
+    Alert
   }
 }
 </script>

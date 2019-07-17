@@ -1,8 +1,9 @@
 <template>
   <footer class="ta-c footer">
+    <div class="contact ta-c">联系我们:<a class="ml-10" href="mailto:support@cetdac.org">support@cetdac.org</a></div>
     <div class="copyright">
       <div class="wrapper">
-        <span class="fl copy-area">copyright @ 2019 cetdac.org all rights reserved.</span>
+        <span class="fl copy-area">copyright @ 2019 cetdac.org</span>
         <span>
           <b-form-select class="select-lang fr" v-model="lang.lang" :options="options"/>
         </span>
@@ -52,7 +53,10 @@ export default {
 
   // position: absolute;
   // bottom: 0;
-
+  .contact{
+    text-align: center;
+    padding-bottom: 10px;
+  }
   .wrapper {
     max-width: 1200px;
     margin: 0 auto;

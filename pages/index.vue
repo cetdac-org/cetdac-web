@@ -1,8 +1,8 @@
 <template>
   <div class="cetdac-web-index">
     <div class="description-title-line">尊贵的CET持币者: </div>
-    <div class="description-line">CETDAC是一个去中心化自治社区，社区建立的使命是为了让所有CET持币人都可以参与到CET生态的建设中来，参与社区共建，同时领取回报，把区块链的去中心化优点发挥出来，目前CoinEx公链尚处于测试网阶段，CETDAC也处在早期，如果你是CET真核粉丝，请在下面把想对CET说的话写下来给我们，写下你对CET的第一个贡献，我们将会根据您提供意见的价值为您配发CoinEx Chain Dex上线后的第一个代币: CETDAC，以表达我们对您意见的重视。</div>
-    <div class="description-end-line">CETDAC</div>
+    <div class="description-line">CETDAC是一个去中心化自治社区，社区建立的使命是为了让所有CET持币人都可以参与到CET生态的建设中来，参与社区共建，同时领取回报，共同推动CET生态走向繁荣，目前CoinEx公链尚处于测试网阶段，CETDAC也处在早期，如果你是CET真核粉丝，请在下面把想对CET说的话写下来给我们，写下你对CET的第一个贡献，我们将会根据您提供意见的价值为您配发CoinEx Chain Dex上线后的第一个代币: CETDAC，以表达我们对您意见的重视。</div>
+    <div class="description-end-line">- CETDAC</div>
     <div class="message-line-wrapper">
       <div class="message-line">
         <b-form @submit="onSubmit">
@@ -54,6 +54,7 @@ export default {
   data () {
     return {
       bullet: true,
+      timeout: null,
       form:{
         name:'',
         text:''
@@ -70,19 +71,19 @@ export default {
           for(let i=0;i<res.data.data.length;i++){
           let element = res.data.data[i], index = i
           let item= {
-            index:index,
-            info:element.name + ": " +element.content, //文字 
-            close:false, //显示关闭按钮 
+            index:  index,
+            info:   element.name + ": " +element.content, //文字 
+            close:  false, //显示关闭按钮 
             speed:  12 + Math.random()*10,
             bottom: Math.random()* 500,
-            old_ie_color:'#000000', //ie低版兼容色,不能与网页背景相同,默认黑色 
+            old_ie_color: '#000000', //ie低版兼容色,不能与网页背景相同,默认黑色 
           };
           (function(item){
             setTimeout(()=>{
               $('body').barrager(item)
               if(item.index >= res.data.data.length - 1){
                 if(_this.bullet) {
-                  setTimeout(function(){
+                  _this.timeout = setTimeout(function(){
                     loop()
                   }, 15000)
                 }
@@ -124,6 +125,7 @@ export default {
   
   beforeDestroy(){
     $.fn.barrager.removeAll()
+    window.clearTimeout(this.timeout)
     this.bullet = false
   }
 

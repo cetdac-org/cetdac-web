@@ -74,7 +74,7 @@ export default {
             index:  index,
             info:   element.name + ": " +element.content, //文字 
             close:  false, //显示关闭按钮 
-            speed:  12 + Math.random()*10,
+            speed:  12 + Math.random()*30,
             bottom: Math.random()* 500,
             old_ie_color: '#000000', //ie低版兼容色,不能与网页背景相同,默认黑色 
           };

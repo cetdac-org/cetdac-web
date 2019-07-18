@@ -72,7 +72,7 @@ export default {
           let element = res.data.data[i], index = i
           let item= {
             index:  index,
-            info:   element.name + ": " +element.content, //文字 
+            info:   element.name + ': ' +element.content,
             close:  false, //显示关闭按钮 
             speed:  12 + Math.random()*30,
             bottom: Math.random()* 500,
@@ -85,10 +85,10 @@ export default {
                 if(_this.bullet) {
                   _this.timeout = setTimeout(function(){
                     loop()
-                  }, 15000)
+                  }, 20000)
                 }
               }
-            }, 1000 + Math.random() * 3000)
+            }, item.index > 0 ? (5000 + Math.random() * 20000):1000)
           })(item)
         }
       }

@@ -44,7 +44,7 @@
 		content.attr({
 			'href': barrage.href,
 			'id': barrage.id
-		}).empty().append(barrage.info);
+		}).empty().append(document.createTextNode(barrage.info));
 		if(navigator.userAgent.indexOf("MSIE 6.0")>0  ||  navigator.userAgent.indexOf("MSIE 7.0")>0 ||  navigator.userAgent.indexOf("MSIE 8.0")>0  ){
 
 			content.css('color', barrage.old_ie_color);

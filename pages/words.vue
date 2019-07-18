@@ -7,7 +7,7 @@
         img-width="600"
         img-alt="海坡语录"
         text-variant="dark"
-        title="海坡语录"
+        title="海坡语录 by 喵小思"
         sub-title="2019.06.29"
         >
       </b-card>
@@ -17,7 +17,7 @@
         img-width="600"
         img-alt="海坡语录"
         text-variant="dark"
-        title="海坡语录"
+        title="海坡语录 by 喵小思"
         sub-title="2019.07.02"
         >
       </b-card>
@@ -29,7 +29,7 @@
         img-width="600"
         img-alt="海坡语录"
         text-variant="dark"
-        title="海坡语录"
+        title="海坡语录 by 喵小思"
         sub-title="2019.07.03"
         >
       </b-card>
@@ -39,7 +39,7 @@
         img-width="600"
         img-alt="海坡语录"
         text-variant="dark"
-        title="海坡语录"
+        title="海坡语录 by 喵小思"
         sub-title="2019.07.04"
         >
       </b-card>
@@ -51,7 +51,7 @@
         img-width="600"
         img-alt="海坡语录"
         text-variant="dark"
-        title="海坡语录"
+        title="海坡语录 by 浔"
         sub-title="2019.07.05"
         >
       </b-card>
@@ -61,7 +61,7 @@
         img-width="600"
         img-alt="海坡语录"
         text-variant="dark"
-        title="海坡语录"
+        title="海坡语录 by 喵小思"
         sub-title="2019.07.05"
         >
       </b-card>
@@ -73,7 +73,7 @@
         img-width="600"
         img-alt="海坡语录"
         text-variant="dark"
-        title="海坡语录"
+        title="海坡语录 by 浔"
         sub-title="2019.07.10"
         >
       </b-card>
@@ -83,7 +83,7 @@
         img-width="600"
         img-alt="海坡语录"
         text-variant="dark"
-        title="海坡语录"
+        title="海坡语录 by 喵小思"
         sub-title="2019.07.11"
         >
       </b-card>
@@ -95,7 +95,7 @@
         img-width="600"
         img-alt="海坡语录"
         text-variant="dark"
-        title="海坡语录"
+        title="海坡语录 by 喵小思"
         sub-title="2019.07.11"
         >
       </b-card>
@@ -105,7 +105,7 @@
         img-width="600"
         img-alt="海坡语录"
         text-variant="dark"
-        title="海坡语录"
+        title="海坡语录 by 喵小思"
         sub-title="2019.07.13"
         >
       </b-card>
@@ -117,8 +117,18 @@
         img-width="600"
         img-alt="海坡语录"
         text-variant="dark"
-        title="海坡语录"
+        title="海坡语录 by 喵小思"
         sub-title="2019.07.15"
+        >
+      </b-card>
+      <b-card
+        overlay
+        img-src="/haipo/0718.jpeg"
+        img-width="600"
+        img-alt="海坡语录"
+        text-variant="dark"
+        title="海坡语录 by 浔"
+        sub-title="2019.07.18"
         >
       </b-card>
     </b-card-group>

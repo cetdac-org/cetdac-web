@@ -33,7 +33,7 @@ module.exports = {
         type: "text/javascript"
       },
       {
-        src: "/barrager/js/jquery.barrager.js",
+        src: "/barrager/js/jquery.barrager.js?1",
         type: "text/javascript"
       }
     ]

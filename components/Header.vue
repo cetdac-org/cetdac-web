@@ -6,11 +6,11 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
           <b-nav-item exact to="/">CETDAC</b-nav-item>
-          <b-nav-item target="_blank" href="https://www.coinex.com/">购买CET</b-nav-item>
+          <b-nav-item target="_blank" href="https://docs.cetdac.org/zh/buycet/">购买CET</b-nav-item>
           <b-nav-item target="_blank" href="https://docs.cetdac.org/">资料库</b-nav-item>
           <b-nav-item to="/words">海坡语录</b-nav-item>
           <b-nav-item target="_blank" href="https://www.coinex.org/">CoinEx Chain</b-nav-item>
-          <b-nav-item target="_blank" href="https://forum.coinex.org/">论坛</b-nav-item>
+          <!--<b-nav-item to="/mall">周边商城</b-nav-item>-->
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>

@@ -140,6 +140,7 @@ export default {
 
 <style lang="scss" scoped>
 .cetdac-web-index {
+  color: white;
   max-width: 1200px;
   min-height: 800px;
   margin:0 auto;

@@ -1,19 +1,19 @@
 {
     "en_US": {
         "海坡语录": "Haipo words",
-        "论坛": "Forum",
+        "论坛@DEPRECATED@": "Forum",
         "购买CET": "Get CET",
         "资料库": "Docs"
     },
     "zh_Hans_CN": {
         "海坡语录": "海坡语录",
-        "论坛": "论坛",
         "购买CET": "购买CET",
         "资料库": "资料库"
     },
     "zh_Hant_HK": {
+        "周边商城@DEPRECATED@": "周邊商城",
         "海坡语录": "海坡語錄",
-        "论坛": "論壇",
+        "论坛@DEPRECATED@": "論壇",
         "购买CET": "購買CET",
         "资料库": "資料庫"
     }

@@ -3,6 +3,18 @@
     <b-card-group class="mt-30" deck>
       <b-card
         overlay
+        img-src="/haipo/0731.jpeg"
+        img-width="600"
+        img-alt="海坡语录"
+        text-variant="dark"
+        title="海坡语录 by 喵小思"
+        sub-title="2019.07.31"
+        >
+      </b-card>
+    </b-card-group>
+    <b-card-group class="mt-30" deck>
+      <b-card
+        overlay
         img-src="/haipo/0718-1.jpeg"
         img-width="600"
         img-alt="海坡语录"

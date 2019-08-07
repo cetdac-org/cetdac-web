@@ -7,6 +7,7 @@
         <b-navbar-nav class="ml-auto">
           <b-nav-item exact to="/">CETDAC</b-nav-item>
           <b-nav-item target="_blank" href="https://docs.cetdac.org/zh/buycet/">购买CET</b-nav-item>
+          <b-nav-item to="/pool">CET矿池</b-nav-item>
           <b-nav-item target="_blank" href="https://docs.cetdac.org/">资料库</b-nav-item>
           <b-nav-item to="/words">海坡语录</b-nav-item>
           <b-nav-item target="_blank" href="https://www.coinex.org/">CoinEx Chain</b-nav-item>

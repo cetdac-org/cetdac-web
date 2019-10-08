@@ -57,6 +57,16 @@ module.exports = {
     // { src: "~/plugins/awsome", ssr: false },
     { src: "~/plugins/ga", ssr: false}
   ],
+  axios:{
+    withCredentials:false,
+  },
+  proxy: {
+    //开启代理
+    "/api/": {
+      target:"http://localhost:4001",
+      pathRewrite: {"^/api/":""}
+    }
+  },
   /*
   ** Nuxt.js modules
   */

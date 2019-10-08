@@ -7,3 +7,15 @@ table{table-layout:fixed}
 :focus {
   outline: 0;
 }
+.flex-sp{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.flex{
+  display: flex;
+  flex: 1;
+}
+.text-center{
+  text-align: center;
+}

@@ -20,7 +20,7 @@ export default ({
 
 	//全局处理
 	inst.defaults.timeout = 10000
-	inst.defaults.withCredentials = true
+	inst.defaults.withCredentials = false
 	//inst.defaults.headers.common["platform"] = "mobile"
 	//inst.defaults.headers.common["timezone"] = new Date().getTimezoneOffset() / 60
 	//inst.defaults.headers.common["content-type"] = "text/plain"
@@ -55,7 +55,7 @@ export default ({
 	}
 	//未登录
 	inst.interceptors.response.use(function (res) {
-		return res
+		return res.data ? res.data:Promise.reject(res)
 	}, function (e) {
 		if (!process.SERVER_BUILD) {
 			ga("send", "exception", {

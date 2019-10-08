@@ -16,8 +16,8 @@ let serverApiDomain = "",
 if(process.env.NODE_ENV === "dev" || process.env.NODE_ENV === "development"){
     //开发环境
     protocol = "https:"
-    clientApiDomain = "https://blockservice.bitapp.net.cn/admin/"
-    serverApiDomain = "https://blockservice.bitapp.net.cn/admin/"
+    clientApiDomain = "http://localhost:4001/api"
+    serverApiDomain = "http://localhost:4001/api"
     //webSocketDomain = "ws://dev.viabtc.com:8008"
     cdnDomain = ""
     fileDomain = "/upload"

@@ -64,9 +64,7 @@ export default {
 
   mounted(){
     const _this = this
-    this.axios.get('/cetdac/',{
-        withCredentials:false
-      }).then(res=>{
+    this.axios.get('/cetdac').then(res=>{
         const loop = function () {
           for(let i=0;i<res.data.data.length;i++){
           let element = res.data.data[i], index = i
@@ -100,15 +98,12 @@ export default {
     onSubmit: function(evt){
       evt.preventDefault()
     },
-
     onConfirm: function(){
       const _this = this
         if(_this.form.name && _this.form.text){
-        this.axios.post('/cetdac/', {
+        this.axios.post('/cetdac', {
           name:_this.form.name,
           content: _this.form.text
-        },{
-          withCredentials:false
         }).then(res=>{
           _this.$store.commit('setSuccessText', '留言成功')
           $('body').barrager({info:_this.form.name + ': ' +_this.form.text, color: '#13cfb8'})
